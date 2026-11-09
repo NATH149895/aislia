@@ -1,0 +1,66 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { SITE } from '../../data/site';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', (p) => !p.data.draft);
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post, posts } }));
+}
+const { post, posts } = Astro.props;
+const { Content } = await render(post);
+const d = post.data;
+const fmt = (x: Date) => x.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
+const related = posts.filter((p: any) => p.id !== post.id && p.data.category === d.category).slice(0, 3);
+const PRODUCT: Record<string, { href: string; label: string }> = {
+  aislamiento: { href: '/aislamiento-desvanes-1-euro/', label: 'Aislamiento de desvanes desde 1 €' },
+  aerotermia: { href: '/aerotermia-1-euro/', label: 'Aerotermia desde 1 €' },
+};
+const prod = PRODUCT[d.category];
+const ld = {
+  '@context': 'https://schema.org', '@type': 'Article',
+  headline: d.title, description: d.description,
+  datePublished: d.pubDate.toISOString(), dateModified: (d.updatedDate ?? d.pubDate).toISOString(),
+  author: { '@type': 'Organization', name: SITE.name, url: SITE.url },
+  publisher: { '@type': 'Organization', name: SITE.name, logo: { '@type': 'ImageObject', url: SITE.url + '/favicon.svg' } },
+  mainEntityOfPage: `${SITE.url}/blog/${post.id}/`, inLanguage: 'es-ES',
+  ...(d.keywords.length ? { keywords: d.keywords.join(', ') } : {}),
+};
+---
+<Base title={d.title} description={d.description} type="article" jsonLd={ld}>
+  <article>
+    <header class="page-hero">
+      <div class="wrap prose">
+        <Breadcrumbs items={[{ name: 'Guías', href: '/blog/' }, { name: d.title, href: `/blog/${post.id}/` }]} />
+        <h1>{d.title}</h1>
+        <p class="lead">{d.description}</p>
+        <p class="small muted">Publicado el <time datetime={d.pubDate.toISOString()}>{fmt(d.pubDate)}</time>{d.updatedDate && <> · Actualizado el <time datetime={d.updatedDate.toISOString()}>{fmt(d.updatedDate)}</time></>} · Equipo Aislia</p>
+      </div>
+    </header>
+    <div class="section" style="padding-top:16px">
+      <div class="wrap prose">
+        <Content />
+        <div class="inline-cta">
+          <b>¿Tu vivienda es elegible?</b>
+          <p>Haz el test gratuito en 1 minuto. Sin requisitos de ingresos, certificado energético incluido.</p>
+          <a href="/simulador/" class="btn btn--accent">Comprobar mi elegibilidad</a>
+          {prod && <a href={prod.href} class="btn btn--ghost">{prod.label}</a>}
+        </div>
+        {related.length > 0 && (
+          <>
+            <h2>Te puede interesar</h2>
+            <ul>{related.map((r: any) => <li><a href={`/blog/${r.id}/`}>{r.data.title}</a></li>)}</ul>
+          </>
+        )}
+      </div>
+    </div>
+  </article>
+  <section class="section" style="padding-top:0"><div class="wrap"><CtaBand /></div></section>
+</Base>
+<style>
+  .inline-cta { margin: 40px 0; padding: 24px; border-radius: var(--radius-lg); background: var(--c-soft); border: 1px solid var(--c-line); }
+  .inline-cta b { font-size: 1.2rem; display: block; margin-bottom: 4px; }
+  .inline-cta .btn { margin: 4px 8px 4px 0; }
+</style>

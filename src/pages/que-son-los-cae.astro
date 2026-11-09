@@ -1,0 +1,60 @@
+---
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import CtaBand from '../components/CtaBand.astro';
+---
+<Base title="Qué son los Certificados de Ahorro Energético (CAE) y cómo te benefician" description="Los CAE obligan a las compañías energéticas a financiar el ahorro energético de los hogares. Te explicamos cómo funcionan, quién paga y por qué tu obra puede costarte 1 €.">
+  <section class="page-hero">
+    <div class="wrap">
+      <Breadcrumbs items={[{ name: 'Qué son los CAE', href: '/que-son-los-cae/' }]} />
+      <h1>Qué son los CAE (Certificados de Ahorro Energético)</h1>
+      <p class="lead">El mecanismo, creado en 2023, que obliga a las grandes compañías energéticas a pagar las obras de ahorro de los hogares españoles.</p>
+    </div>
+  </section>
+  <section class="section" style="padding-top:24px">
+    <div class="wrap prose">
+      <h2>Una definición sencilla</h2>
+      <p>Un <strong>Certificado de Ahorro Energético (CAE)</strong> es un documento electrónico que acredita que se ha ahorrado <strong>1 kWh de energía final al año</strong> gracias a una actuación concreta: aislar un desván, sustituir una caldera, renovar una instalación…</p>
+      <p>El sistema lo creó el <strong>Real Decreto 36/2023</strong>, inspirado en los certificados de ahorro que funcionan en Francia e Italia desde hace años. Su objetivo: ayudar a España a cumplir sus objetivos europeos de eficiencia energética.</p>
+
+      <h2>¿Quién paga?</h2>
+      <p>Los <strong>sujetos obligados</strong> del Fondo Nacional de Eficiencia Energética: las comercializadoras de gas y electricidad y los operadores de productos petrolíferos. Cada año deben acreditar un volumen de ahorro. Pueden pagar una cuota al Fondo o comprar CAE generados por obras reales en hogares y empresas. Comprar CAE suele salirles más a cuenta, y ahí es donde entras tú.</p>
+
+      <h2>¿Cómo se convierte en un descuento?</h2>
+      <ol>
+        <li>Tu obra genera ahorro de energía, calculado con una <strong>ficha oficial</strong> (RES022 para desvanes, RES060 para aerotermia).</li>
+        <li>Un verificador independiente comprueba el expediente y la comunidad autónoma emite los CAE.</li>
+        <li>Los CAE se venden a un sujeto obligado.</li>
+        <li>Tú cedes tus CAE a cambio de un descuento directo en la obra. En los casos elegibles, el descuento cubre todo salvo 1 €.</li>
+      </ol>
+
+      <h2>Las fichas que utilizamos</h2>
+      <div class="table-wrap">
+        <table class="table">
+          <thead><tr><th>Ficha</th><th>Actuación</th><th>Lo esencial</th></tr></thead>
+          <tbody>
+            <tr><td><strong>RES022</strong></td><td>Aislamiento de desvanes y espacios bajo cubierta no habitables</td><td>Zonas climáticas C, D y E. En vigor desde el 6/6/2026.</td></tr>
+            <tr><td><strong>RES060</strong></td><td>Sustitución de caldera de combustión por bomba de calor eléctrica</td><td>Toda España. Multiplicadores ×2 a ×4 desde noviembre de 2026.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>CAE y subvenciones: ¿cuál es la diferencia?</h2>
+      <div class="table-wrap">
+        <table class="table">
+          <thead><tr><th></th><th>CAE</th><th>Subvención clásica</th></tr></thead>
+          <tbody>
+            <tr><td>Requisitos de ingresos</td><td>No</td><td>A menudo</td></tr>
+            <tr><td>Adelantar el dinero</td><td>No, descuento directo</td><td>Sí, cobro meses después</td></tr>
+            <tr><td>Trámites para ti</td><td>Ninguno: los hace la empresa</td><td>Solicitud, justificación…</td></tr>
+            <tr><td>Quién financia</td><td>Las compañías energéticas</td><td>Fondos públicos</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>El nuevo bonus para la aerotermia</h2>
+      <p>Con el <strong>Real Decreto-ley 7/2026</strong> y la <strong>Resolución de 3 de noviembre de 2026</strong>, el Estado multiplica por 2, 2,5, 3 o 4 los CAE generados al cambiar una caldera de combustión por aerotermia, y por 1,5 adicional para hogares vulnerables. <a href="/aerotermia-1-euro/">Ver la aerotermia desde 1 €</a>.</p>
+    </div>
+  </section>
+  <section class="section" style="padding-top:0"><div class="wrap"><CtaBand /></div></section>
+</Base>

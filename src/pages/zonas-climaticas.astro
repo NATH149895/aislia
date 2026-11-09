@@ -1,0 +1,59 @@
+---
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { PROVINCES } from '../data/provinces';
+const by = (z: string[]) => PROVINCES.filter((p) => z.includes(p.zone));
+const groups = [
+  { z: 'E', list: by(['E']), txt: 'Inviernos muy fríos' },
+  { z: 'D', list: by(['D']), txt: 'Inviernos fríos' },
+  { z: 'C', list: by(['C']), txt: 'Inviernos moderados' },
+  { z: 'A / B / α', list: by(['A', 'B', 'α']), txt: 'Inviernos suaves: solo municipios en altitud' },
+];
+---
+<Base title="Zonas climáticas C, D y E: ¿tu municipio es elegible?" description="La zona climática de tu municipio (CTE DB-HE, Anejo B) decide si puedes aislar tu desván desde 1 € y cuánta ayuda recibes para la aerotermia. Consulta tu provincia.">
+  <section class="page-hero">
+    <div class="wrap">
+      <Breadcrumbs items={[{ name: 'Zonas climáticas', href: '/zonas-climaticas/' }]} />
+      <h1>Zonas climáticas: ¿tu municipio es elegible?</h1>
+      <p class="lead">El Código Técnico de la Edificación divide España en zonas climáticas. La letra de invierno de tu municipio decide tu acceso a las ayudas.</p>
+    </div>
+  </section>
+  <section class="section" style="padding-top:24px">
+    <div class="wrap prose">
+      <h2>Cómo leer una zona climática</h2>
+      <p>Cada municipio tiene una zona del tipo <strong>D3</strong> o <strong>C1</strong>. La <strong>letra</strong> (α, A, B, C, D, E) indica la severidad del invierno, de la más suave a la más fría. El <strong>número</strong> (1 a 4) indica la del verano. Para las ayudas, <strong>solo cuenta la letra</strong>.</p>
+      <ul>
+        <li><strong>Aislamiento de desvanes (RES022):</strong> solo zonas <strong>C, D y E</strong>.</li>
+        <li><strong>Aerotermia (RES060):</strong> toda España, con más ayuda cuanto más fría es la zona.</li>
+      </ul>
+
+      <h2>La altitud lo cambia todo</h2>
+      <p>La zona depende de la provincia <strong>y de la altitud del municipio</strong> (CTE DB-HE, Anejo B). Cuanto más alto, más frío. Por ejemplo, la provincia de Madrid tiene una zona base C, pero Madrid capital, a unos 650 m, está en zona <strong>D3</strong>. Del mismo modo, muchos pueblos de interior de Granada, Jaén o Valencia pasan a zona C o D.</p>
+      <blockquote>No hace falta que lo calcules tú: la zona exacta figura en el certificado energético de tu vivienda, que realizamos gratis. Es la zona que cuenta para el expediente.</blockquote>
+
+      <h2>Zona base por provincia</h2>
+      <p>La tabla indica la zona de los municipios más bajos de cada provincia. Los municipios situados más alto pueden estar en una zona más fría.</p>
+    </div>
+    <div class="wrap zones">
+      {groups.map((g) => (
+        <div class="card">
+          <h3>Zona {g.z}</h3>
+          <p class="small muted">{g.txt}</p>
+          <div class="links">{g.list.map((p) => <a href={`/provincias/${p.slug}/`}>{p.name}</a>)}</div>
+        </div>
+      ))}
+    </div>
+    <div class="wrap prose" style="margin-top:32px">
+      <p class="small muted">Fuente: Código Técnico de la Edificación, Documento Básico HE, Anejo B. Ceuta y Melilla (zonas B y A) no son elegibles para el aislamiento de desvanes. En Canarias, solo algunas localidades de cumbre alcanzan la zona C: se estudia caso por caso.</p>
+    </div>
+  </section>
+  <section class="section" style="padding-top:0"><div class="wrap"><CtaBand /></div></section>
+</Base>
+<style>
+  .zones { display: grid; gap: 18px; }
+  @media (min-width: 820px) { .zones { grid-template-columns: repeat(2, 1fr); } }
+  .links { display: flex; flex-wrap: wrap; gap: 8px; }
+  .links a { background: var(--c-soft); padding: 6px 12px; border-radius: 99px; text-decoration: none; font-weight: 600; font-size: .92rem; color: var(--c-primary); }
+  .links a:hover { background: var(--c-primary); color: #fff; }
+</style>

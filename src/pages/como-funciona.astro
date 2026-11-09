@@ -1,0 +1,49 @@
+---
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import CtaBand from '../components/CtaBand.astro';
+const ld = {
+  '@context': 'https://schema.org', '@type': 'HowTo',
+  name: 'Cómo aislar tu desván o instalar aerotermia desde 1 € con los CAE',
+  step: [
+    'Haz el test de elegibilidad en línea',
+    'Recibe la visita técnica y el certificado energético',
+    'Firma el presupuesto con el descuento CAE',
+    'Instalación por una empresa habilitada',
+    'Certificado final y expediente CAE',
+  ].map((name, i) => ({ '@type': 'HowToStep', position: i + 1, name })),
+};
+---
+<Base title="Cómo funciona el aislamiento y la aerotermia desde 1 €" description="Del test en línea a la obra terminada: así funciona la financiación de tu aislamiento o tu aerotermia con los Certificados de Ahorro Energético (CAE), paso a paso." jsonLd={ld}>
+  <section class="page-hero">
+    <div class="wrap">
+      <Breadcrumbs items={[{ name: 'Cómo funciona', href: '/como-funciona/' }]} />
+      <h1>Cómo funciona, paso a paso</h1>
+      <p class="lead">Tú solo tienes que abrirnos la puerta. Nosotros nos encargamos del certificado energético, la obra y todo el expediente de los CAE.</p>
+    </div>
+  </section>
+  <section class="section" style="padding-top:24px">
+    <div class="wrap" style="max-width:860px">
+      <ol class="steps">
+        <li><h3>Test de elegibilidad (1 minuto)</h3><p>Nos indicas tu provincia, tu tipo de vivienda y tu calefacción. Te damos un primer resultado al instante y un asesor te llama para confirmarlo.</p></li>
+        <li><h3>Visita técnica y certificado energético</h3><p>Un técnico visita la vivienda, mide el desván o revisa tu instalación de calefacción y realiza el certificado de eficiencia energética previo, obligatorio para los CAE. Está incluido: no pagas nada.</p></li>
+        <li><h3>Presupuesto con el descuento CAE</h3><p>Recibes un presupuesto claro: precio de la obra, valor de los CAE descontado y lo que te queda por pagar. En las viviendas elegibles, 1 €. Nada empieza sin tu firma.</p></li>
+        <li><h3>Instalación</h3><p>Una empresa instaladora habilitada realiza la obra: una jornada para el desván, de 2 a 4 días para la aerotermia. Tomamos las fotos antes/después exigidas por las fichas.</p></li>
+        <li><h3>Certificado final y expediente CAE</h3><p>Para la aerotermia, realizamos el certificado energético después de la obra y declaramos la instalación. Montamos el expediente, que valida un verificador independiente, y tú cedes tus CAE a cambio del descuento ya aplicado.</p></li>
+      </ol>
+
+      <div class="prose" style="margin-top:48px">
+        <h2>Lo que tendrás que hacer (casi nada)</h2>
+        <ul class="check-list">
+          <li>Darnos acceso a la vivienda para la visita, las fotos y la obra</li>
+          <li>Firmar el presupuesto y el documento de cesión de los CAE</li>
+          <li>Firmar una declaración responsable sobre otras ayudas públicas recibidas para la misma obra</li>
+          <li>Si tienes bono social, aportar el justificante (aumenta la ayuda de la aerotermia ×1,5)</li>
+        </ul>
+        <h2>¿Por qué no hay que adelantar dinero?</h2>
+        <p>Porque no es una subvención que tú solicitas: el valor de los CAE lo paga la compañía energética que los compra, y se te aplica como descuento directo en la factura. Tú no esperas ningún reembolso.</p>
+      </div>
+    </div>
+  </section>
+  <section class="section" style="padding-top:0"><div class="wrap"><CtaBand /></div></section>
+</Base>

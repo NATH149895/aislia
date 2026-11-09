@@ -1,0 +1,26 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../data/site';
+---
+<Base title="Política de cookies" description="Información sobre el uso de cookies en aislia.es." noindex>
+  <section class="section"><div class="wrap prose">
+    <h1>Política de cookies</h1>
+    <p>Una cookie es un pequeño archivo que un sitio web guarda en tu navegador.</p>
+    {SITE.gaId ? (
+      <>
+        <h2>Cookies que utilizamos</h2>
+        <div class="table-wrap"><table class="table">
+          <thead><tr><th>Cookie</th><th>Proveedor</th><th>Finalidad</th><th>Duración</th></tr></thead>
+          <tbody>
+            <tr><td>_ga, _ga_*</td><td>Google (Google Analytics 4)</td><td>Analítica: medir visitas de forma agregada</td><td>Hasta 2 años</td></tr>
+          </tbody>
+        </table></div>
+        <p>Estas cookies <strong>solo se instalan si las aceptas</strong> en el aviso que aparece en tu primera visita. Guardamos tu elección en el almacenamiento local de tu navegador.</p>
+        <h2>Cómo cambiar tu elección</h2>
+        <p>Borra los datos de navegación de este sitio en tu navegador: el aviso volverá a aparecer. También puedes bloquear las cookies desde la configuración de tu navegador.</p>
+      </>
+    ) : (
+      <p>Actualmente este sitio <strong>no utiliza cookies</strong> de análisis, publicidad ni seguimiento. Si en el futuro las utilizamos, te pediremos tu consentimiento previo y actualizaremos esta página.</p>
+    )}
+  </div></section>
+</Base>

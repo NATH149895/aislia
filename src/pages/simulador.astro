@@ -1,0 +1,17 @@
+---
+import Base from '../layouts/Base.astro';
+import Simulator from '../components/Simulator.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+---
+<Base title="Simulador de elegibilidad: aislamiento y aerotermia desde 1 €" description="Comprueba gratis en 1 minuto si tu vivienda puede acogerse al aislamiento de desvanes o a la aerotermia desde 1 € con los Certificados de Ahorro Energético (CAE).">
+  <section class="page-hero">
+    <div class="wrap sim-page">
+      <Breadcrumbs items={[{ name: 'Simulador', href: '/simulador/' }]} />
+      <h1>¿Tu vivienda es elegible?</h1>
+      <p class="lead">Responde unas preguntas rápidas. Te damos un primer resultado al instante y un asesor lo confirma contigo, gratis y sin compromiso.</p>
+      <Simulator />
+      <p class="small muted" style="margin-top:18px">Estimación orientativa, no vinculante. La elegibilidad definitiva depende del estudio técnico, del certificado energético (incluido) y del presupuesto CAE disponible.</p>
+    </div>
+  </section>
+</Base>
+<style>.sim-page { max-width: 680px; }</style>

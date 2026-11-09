@@ -1,0 +1,50 @@
+---
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { PROVINCES, INSULATION_TEXT, HEATPUMP_TEXT } from '../../data/provinces';
+const communities = [...new Set(PROVINCES.map((p) => p.community))].sort((a, b) => a.localeCompare(b, 'es'));
+---
+<Base title="Aislamiento y aerotermia desde 1 € por provincia" description="Consulta si tu provincia es elegible para el aislamiento de desvanes y la aerotermia desde 1 € con los CAE: zona climática y nivel de ayuda en las 52 provincias de España.">
+  <section class="page-hero">
+    <div class="wrap">
+      <Breadcrumbs items={[{ name: 'Provincias', href: '/provincias/' }]} />
+      <h1>Ayudas CAE en tu provincia</h1>
+      <p class="lead">Zona climática base y nivel de ayuda para el aislamiento de desvanes y la aerotermia, provincia por provincia.</p>
+    </div>
+  </section>
+  <section class="section" style="padding-top:24px">
+    <div class="wrap">
+      <div class="table-wrap">
+        <table class="table">
+          <thead><tr><th>Provincia</th><th>Zona base</th><th>Aislamiento de desván</th><th>Aerotermia</th></tr></thead>
+          <tbody>
+            {PROVINCES.map((p) => (
+              <tr>
+                <td><a href={`/provincias/${p.slug}/`}><strong>{p.name}</strong></a><br /><span class="small muted">{p.community}</span></td>
+                <td>{p.zone}</td>
+                <td><span class={`pill pill--${INSULATION_TEXT[p.insulation].tone}`}>{INSULATION_TEXT[p.insulation].short}</span></td>
+                <td><span class={`pill pill--${HEATPUMP_TEXT[p.heatPump].tone}`}>{HEATPUMP_TEXT[p.heatPump].short}</span></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="small muted" style="margin-top:14px">Zona base = municipios más bajos de la provincia. Los municipios en altitud pueden estar en una zona más fría y recibir más ayuda. <a href="/zonas-climaticas/">Más sobre las zonas climáticas</a>.</p>
+      <h2 style="margin-top:48px">Por comunidad autónoma</h2>
+      <div class="ccaa">
+        {communities.map((c) => (
+          <div><b>{c}</b><div>{PROVINCES.filter((p) => p.community === c).map((p) => <a href={`/provincias/${p.slug}/`}>{p.name}</a>)}</div></div>
+        ))}
+      </div>
+    </div>
+  </section>
+  <section class="section" style="padding-top:0"><div class="wrap"><CtaBand /></div></section>
+</Base>
+<style>
+  .ccaa { display: grid; gap: 14px; }
+  @media (min-width: 720px) { .ccaa { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1000px) { .ccaa { grid-template-columns: repeat(3, 1fr); } }
+  .ccaa > div { background: #fff; border: 1px solid var(--c-line); border-radius: var(--radius); padding: 14px 16px; }
+  .ccaa a { margin-right: 12px; display: inline-block; }
+</style>

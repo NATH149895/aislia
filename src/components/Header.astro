@@ -1,0 +1,47 @@
+---
+import Logo from './Logo.astro';
+const nav = [
+  { href: '/aislamiento-desvanes-1-euro/', label: 'Aislamiento' },
+  { href: '/aerotermia-1-euro/', label: 'Aerotermia' },
+  { href: '/como-funciona/', label: 'Cómo funciona' },
+  { href: '/provincias/', label: 'Provincias' },
+  { href: '/blog/', label: 'Guías' },
+];
+const path = Astro.url.pathname;
+---
+<header class="site-header">
+  <div class="wrap bar">
+    <a href="/" class="brand" aria-label="Aislia, inicio"><Logo /></a>
+    <nav class="desktop-nav" aria-label="Principal">
+      {nav.map((n) => <a href={n.href} aria-current={path.startsWith(n.href) ? 'page' : undefined}>{n.label}</a>)}
+    </nav>
+    <a href="/simulador/" class="btn btn--accent cta-head">Comprobar elegibilidad</a>
+    <details class="mobile-nav">
+      <summary aria-label="Abrir menú"><span></span><span></span><span></span></summary>
+      <nav aria-label="Menú móvil">
+        {nav.map((n) => <a href={n.href}>{n.label}</a>)}
+        <a href="/preguntas-frecuentes/">Preguntas frecuentes</a>
+        <a href="/simulador/" class="btn btn--accent btn--block">Comprobar elegibilidad</a>
+      </nav>
+    </details>
+  </div>
+</header>
+<style>
+  .site-header { position: sticky; top: 0; z-index: 50; background: rgba(251, 250, 246, .92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--c-line); }
+  .bar { display: flex; align-items: center; gap: 24px; height: 70px; }
+  .brand { text-decoration: none; margin-right: auto; }
+  .desktop-nav { display: none; gap: 22px; }
+  .desktop-nav a { color: var(--c-ink); text-decoration: none; font-weight: 600; font-size: .97rem; }
+  .desktop-nav a:hover, .desktop-nav a[aria-current] { color: var(--c-primary-2); }
+  .cta-head { display: none; padding: 10px 18px; font-size: .92rem; }
+  .mobile-nav summary { list-style: none; cursor: pointer; width: 44px; height: 44px; display: grid; place-content: center; gap: 5px; }
+  .mobile-nav summary::-webkit-details-marker { display: none; }
+  .mobile-nav summary span { display: block; width: 24px; height: 2.5px; background: var(--c-ink); border-radius: 2px; }
+  .mobile-nav nav { position: absolute; left: 0; right: 0; top: 70px; background: var(--c-bg); border-bottom: 1px solid var(--c-line); padding: 12px 16px 20px; display: grid; gap: 4px; box-shadow: var(--shadow); }
+  .mobile-nav nav a:not(.btn) { padding: 12px 4px; color: var(--c-ink); text-decoration: none; font-weight: 600; border-bottom: 1px solid var(--c-line); }
+  .mobile-nav nav .btn { margin-top: 12px; }
+  @media (min-width: 1000px) {
+    .desktop-nav, .cta-head { display: flex; }
+    .mobile-nav { display: none; }
+  }
+</style>

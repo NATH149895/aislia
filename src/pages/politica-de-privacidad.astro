@@ -1,0 +1,37 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE, pending } from '../data/site';
+const L = SITE.legal;
+---
+<Base title="Política de privacidad" description="Cómo trata Aislia tus datos personales." noindex>
+  <section class="section"><div class="wrap prose">
+    <h1>Política de privacidad</h1>
+    <p>Conforme al Reglamento (UE) 2016/679 (RGPD) y a la Ley Orgánica 3/2018 (LOPDGDD), te informamos de cómo tratamos tus datos.</p>
+    <h2>1. Responsable del tratamiento</h2>
+    <ul>
+      <li><strong>Responsable:</strong> {pending(L.companyName)}</li>
+      <li><strong>NIF/CIF:</strong> {pending(L.taxId)}</li>
+      <li><strong>Domicilio:</strong> {pending(L.address)}</li>
+      <li><strong>Contacto para protección de datos:</strong> {pending(L.contactEmail)}</li>
+    </ul>
+    <h2>2. Datos que tratamos</h2>
+    <p>A través del simulador: nombre, teléfono, código postal y las respuestas sobre tu vivienda (provincia, tipo de vivienda, calefacción, superficie aproximada, si dispones de bono social). No solicitamos datos que no sean necesarios para estudiar tu solicitud.</p>
+    <h2>3. Finalidad</h2>
+    <ul>
+      <li>Estudiar la elegibilidad de tu vivienda para las actuaciones financiadas con CAE.</li>
+      <li>Contactarte por teléfono o WhatsApp para darte información y, si lo deseas, organizar una visita técnica y elaborar un presupuesto.</li>
+    </ul>
+    <p>No tomamos decisiones automatizadas con efectos jurídicos sobre ti: el resultado del simulador es orientativo.</p>
+    <h2>4. Base jurídica</h2>
+    <p>Tu <strong>consentimiento</strong> expreso (art. 6.1.a RGPD), que otorgas al marcar la casilla del formulario y puedes retirar en cualquier momento. Si se formaliza un contrato, la base será su ejecución (art. 6.1.b RGPD).</p>
+    <h2>5. Destinatarios</h2>
+    <p>Tus datos pueden comunicarse, solo en la medida necesaria, a las empresas instaladoras habilitadas que realizarán la visita y la obra, al técnico certificador y a las entidades que intervienen en la tramitación de los CAE. También acceden a ellos nuestros proveedores tecnológicos (alojamiento web, CRM), como encargados del tratamiento. No vendemos tus datos.</p>
+    <p>El formulario se aloja en Netlify, Inc. (EE. UU.), adherida al Marco de Privacidad de Datos UE-EE. UU., lo que garantiza un nivel de protección adecuado.</p>
+    <h2>6. Conservación</h2>
+    <p>Conservamos tus datos mientras sean necesarios para gestionar tu solicitud y, como máximo, 12 meses desde el último contacto si no llegas a contratar. Si contratas, durante la relación contractual y los plazos legales aplicables.</p>
+    <h2>7. Tus derechos</h2>
+    <p>Puedes ejercer tus derechos de acceso, rectificación, supresión, oposición, limitación del tratamiento y portabilidad, así como retirar tu consentimiento, escribiendo a {pending(L.contactEmail)}. Si consideras que no hemos tratado tus datos correctamente, puedes reclamar ante la Agencia Española de Protección de Datos (<a href="https://www.aepd.es" rel="noopener">www.aepd.es</a>).</p>
+    <h2>8. Seguridad</h2>
+    <p>Aplicamos medidas técnicas y organizativas adecuadas para proteger tus datos (conexión cifrada HTTPS, acceso restringido).</p>
+  </div></section>
+</Base>

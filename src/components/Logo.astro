@@ -1,0 +1,12 @@
+---
+const { light = false } = Astro.props;
+---
+<span class="logo" aria-label="Aislia">
+  <svg viewBox="0 0 64 64" width="36" height="36" aria-hidden="true"><rect width="64" height="64" rx="16" fill={light ? '#ffffff' : '#0e5a4c'}/><path d="M12 34 32 16l20 18" fill="none" stroke={light ? '#0e5a4c' : '#fff'} stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 44c3-3 7-3 10 0s7 3 10 0" fill="none" stroke="#f08a24" stroke-width="5" stroke-linecap="round"/></svg>
+  <span class="logo-text" style={light ? 'color:#fff' : ''}>aislia<span class="logo-dot">.es</span></span>
+</span>
+<style>
+  .logo { display: inline-flex; align-items: center; gap: 10px; }
+  .logo-text { font-weight: 800; font-size: 1.45rem; letter-spacing: -0.03em; color: var(--c-primary); }
+  .logo-dot { color: var(--c-accent); }
+</style>

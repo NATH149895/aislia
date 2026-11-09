@@ -1,0 +1,120 @@
+---
+import Base from '../layouts/Base.astro';
+import Simulator from '../components/Simulator.astro';
+import Faq from '../components/Faq.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { SITE } from '../data/site';
+
+const faq = [
+  { q: '¿Qué es un desván «no habitable»?', a: 'Es el espacio entre el último forjado (el techo de tu última planta) y el tejado, que no se usa como habitación: cámara de aire, trastero, buhardilla sin acondicionar. Si el espacio se utiliza como dormitorio o salón, la ficha RES022 no se aplica.' },
+  { q: '¿Qué material se utiliza?', a: 'Principalmente lana mineral (de roca o de vidrio) soplada, que rellena todos los huecos sin juntas, o paneles/mantas cuando el acceso lo permite. Son materiales incombustibles, que no se degradan y con marcado CE.' },
+  { q: '¿Cuánto dura la obra?', a: 'Entre medio día y un día para una vivienda unifamiliar. No hay que vaciar la casa ni hacer obra en las habitaciones: se trabaja desde el desván.' },
+  { q: '¿Cuánto voy a ahorrar?', a: 'Depende de tu vivienda, pero un desván sin aislar puede ser responsable de hasta un 30 % de las pérdidas de calor. Notarás la diferencia desde el primer invierno, y también en verano, porque la casa se calienta menos.' },
+  { q: '¿Hay requisitos de ingresos o de superficie?', a: 'No. No hay condición de ingresos ni superficie mínima. Lo único que cuenta es que la vivienda esté en zona climática C, D o E y que el desván no sea habitable.' },
+  { q: '¿Vivo en un piso, puedo acogerme?', a: 'Solo si tu piso está en la última planta y tiene un espacio no habitable encima. Si hay otras viviendas por encima, el aislamiento de la cubierta corresponde a la comunidad de propietarios.' },
+];
+
+const ld = {
+  '@context': 'https://schema.org', '@type': 'Service',
+  name: 'Aislamiento de desvanes desde 1 € (ficha CAE RES022)',
+  serviceType: 'Aislamiento térmico de desvanes',
+  provider: { '@type': 'Organization', name: SITE.name, url: SITE.url },
+  areaServed: { '@type': 'Country', name: 'España' },
+  offers: { '@type': 'Offer', price: '1', priceCurrency: 'EUR', description: 'Desde 1 € para viviendas elegibles en zona climática C, D o E.' },
+};
+---
+<Base
+  title="Aislamiento de desvanes por 1 € con los CAE (ficha RES022)"
+  description="Aísla tu desván desde 1 € gracias a los Certificados de Ahorro Energético. Sin requisitos de ingresos ni superficie mínima. Zonas climáticas C, D y E. Certificado energético incluido."
+  jsonLd={ld}
+>
+  <section class="page-hero">
+    <div class="wrap hero-grid">
+      <div>
+        <Breadcrumbs items={[{ name: 'Aislamiento de desvanes', href: '/aislamiento-desvanes-1-euro/' }]} />
+        <span class="pill pill--ok">Ficha CAE RES022 · en vigor desde el 6/6/2026</span>
+        <h1>Aislamiento de desvanes desde 1 €</h1>
+        <p class="lead">Aislamos el suelo de tu desván no habitable con lana mineral soplada o paneles. Las compañías energéticas lo financian a través de los CAE: <strong>sin requisitos de ingresos y sin superficie mínima</strong>.</p>
+        <ul class="check-list">
+          <li>Obra en una sola jornada, sin entrar en las habitaciones</li>
+          <li>Menos frío en invierno y menos calor en verano</li>
+          <li>Certificado energético y trámites incluidos</li>
+        </ul>
+      </div>
+      <Simulator product="aislamiento" />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap prose">
+      <h2>¿Por qué aislar el desván primero?</h2>
+      <p>El aire caliente sube. En una vivienda sin aislar, el tejado es la primera vía de escape del calor: <strong>hasta un 30 % de las pérdidas</strong> de una casa se producen por la cubierta. Aislar el suelo del desván es, de lejos, la obra con mejor relación coste/ahorro que existe, y ahora la financian los Certificados de Ahorro Energético.</p>
+
+      <h2>Dos técnicas según tu desván</h2>
+      <h3>Lana mineral soplada</h3>
+      <p>Una máquina proyecta copos de lana mineral sobre el suelo del desván hasta alcanzar el espesor necesario. Es la técnica ideal para desvanes de poca altura o difícil acceso: el material rellena todos los rincones y no deja puentes térmicos.</p>
+      <h3>Paneles o mantas</h3>
+      <p>Cuando el desván es accesible y despejado, se colocan paneles o rollos de aislante sobre el forjado. Es una solución limpia y duradera, compatible con un uso de almacenamiento ligero si se añade una pasarela.</p>
+
+      <h2>Condiciones para el aislamiento a 1 €</h2>
+      <div class="table-wrap">
+        <table class="table">
+          <thead><tr><th>Condición</th><th>Detalle</th></tr></thead>
+          <tbody>
+            <tr><td>Tipo de vivienda</td><td>Vivienda residencial privada <strong>existente</strong> (casa o piso de última planta)</td></tr>
+            <tr><td>Espacio a aislar</td><td>Desván, cámara o espacio bajo cubierta <strong>no habitable</strong></td></tr>
+            <tr><td>Zona climática</td><td>Invierno <strong>C, D o E</strong> (solo cuenta la letra) · <a href="/zonas-climaticas/">ver zonas</a></td></tr>
+            <tr><td>Ingresos</td><td>Sin condición</td></tr>
+            <tr><td>Superficie</td><td>Sin mínimo</td></tr>
+            <tr><td>Certificado energético</td><td>Obligatorio antes de la obra · <strong>incluido</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Un aislamiento exigente, no un «parche»</h2>
+      <p>La ficha RES022 fija una resistencia térmica mínima según el clima. Con una lana mineral estándar (λ = 0,040 W/m·K), eso supone aproximadamente:</p>
+      <div class="table-wrap">
+        <table class="table">
+          <thead><tr><th>Zona climática</th><th>Resistencia mínima (Rt)</th><th>Espesor orientativo</th></tr></thead>
+          <tbody>
+            <tr><td>C</td><td>3,8 m²K/W</td><td>≈ 15 cm</td></tr>
+            <tr><td>D</td><td>4,0 m²K/W</td><td>≈ 16 cm</td></tr>
+            <tr><td>E</td><td>4,7 m²K/W</td><td>≈ 19 cm</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="small muted">El espesor real depende del producto elegido (espesor = Rt × λ). Siempre cumplimos o superamos el mínimo.</p>
+
+      <h2>Cómo se calcula la ayuda</h2>
+      <p>El ahorro se calcula a partir de la superficie aislada, la zona climática y la antigüedad del edificio. Hay un límite: el ahorro reconocido no puede superar el <strong>50 % del consumo de calefacción</strong> que indica tu certificado energético antes de las obras. Por eso el certificado es la pieza clave del expediente, y por eso lo realizamos nosotros.</p>
+
+      <h2>Lo que hacemos por ti</h2>
+      <ul class="check-list">
+        <li>Certificado de eficiencia energética antes de la obra, registrado en tu comunidad autónoma</li>
+        <li>Fotografías antes/después con referencias fijas (vigas, chimenea, trampilla), como exige la ficha</li>
+        <li>Instalación por una empresa inscrita en el Registro de Empresas Acreditadas (REA)</li>
+        <li>Montaje completo del expediente CAE y cesión de los certificados</li>
+      </ul>
+
+      <blockquote>Desde el 6 de junio de 2026, el aislamiento de desvanes se tramita exclusivamente con la ficha RES022. Si alguien te ofrece hacerlo con otra ficha, desconfía.</blockquote>
+    </div>
+  </section>
+
+  <section class="section section--soft">
+    <div class="wrap" style="max-width:860px">
+      <h2>Preguntas sobre el aislamiento de desvanes</h2>
+      <Faq items={faq} />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap"><CtaBand title="¿Tu desván cumple los requisitos?" text="Compruébalo en 1 minuto. Gratis, sin compromiso y con el certificado energético incluido." /></div>
+  </section>
+</Base>
+
+<style>
+  .hero-grid { display: grid; gap: 32px; align-items: start; }
+  @media (min-width: 980px) { .hero-grid { grid-template-columns: 1.05fr .95fr; gap: 48px; } }
+  .pill { margin-bottom: 14px; white-space: normal; }
+</style>

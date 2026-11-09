@@ -1,0 +1,409 @@
+---
+import { PROVINCES } from '../data/provinces';
+interface Props { product?: 'aislamiento' | 'aerotermia' | 'ambos'; province?: string; compact?: boolean }
+const { product = '', province = '', compact = false } = Astro.props;
+const provData = PROVINCES.map((p) => ({ s: p.slug, n: p.name, i: p.ine, z: p.zone, ins: p.insulation, hp: p.heatPump }));
+---
+<div class={`sim ${compact ? 'sim--compact' : ''}`} id="simulador" data-product={product} data-province={province}>
+  <div class="sim-head">
+    <div class="sim-progress" aria-hidden="true"><span class="sim-bar"></span></div>
+    <div class="sim-row"><p class="sim-step-label small muted"></p><button type="button" class="back small" hidden>← Atrás</button></div>
+  </div>
+
+  <!-- name/data-netlify : Netlify détecte ce formulaire au déploiement et stocke les leads -->
+  <form name="simulador" method="POST" data-netlify="true" netlify-honeypot="empresa" novalidate>
+    <input type="hidden" name="form-name" value="simulador" />
+    <p hidden><label>No rellenar: <input name="empresa" /></label></p>
+    <input type="hidden" name="producto" />
+    <input type="hidden" name="provincia" />
+    <input type="hidden" name="zona_base" />
+    <input type="hidden" name="montana" />
+    <input type="hidden" name="vivienda" />
+    <input type="hidden" name="ultima_planta" />
+    <input type="hidden" name="desvan" />
+    <input type="hidden" name="calefaccion" />
+    <input type="hidden" name="emisores" />
+    <input type="hidden" name="superficie" />
+    <input type="hidden" name="bono_social" />
+    <input type="hidden" name="resultado_aislamiento" />
+    <input type="hidden" name="resultado_aerotermia" />
+    <input type="hidden" name="pagina" />
+
+    <!-- STEP: producto -->
+    <section class="step" data-step="producto">
+      <h3>¿Qué te interesa?</h3>
+      <div class="opts">
+        <button type="button" class="opt" data-set="producto" data-value="aislamiento"><b>Aislar mi desván</b><small>Aislamiento bajo cubierta no habitable</small></button>
+        <button type="button" class="opt" data-set="producto" data-value="aerotermia"><b>Cambiar mi caldera</b><small>Aerotermia (bomba de calor)</small></button>
+        <button type="button" class="opt" data-set="producto" data-value="ambos"><b>Las dos cosas</b><small>Máximo ahorro</small></button>
+      </div>
+    </section>
+
+    <!-- STEP: provincia -->
+    <section class="step" data-step="provincia" hidden>
+      <h3>¿En qué provincia está la vivienda?</h3>
+      <label class="field">
+        <span class="sr">Provincia</span>
+        <select id="sim-prov">
+          <option value="">Selecciona tu provincia…</option>
+          {provData.map((p) => <option value={p.s}>{p.n}</option>)}
+        </select>
+      </label>
+      <p class="err" data-err="provincia" hidden>Selecciona una provincia.</p>
+      <div class="nav"><button type="button" class="btn btn--primary" data-next>Continuar →</button></div>
+    </section>
+
+    <!-- STEP: montaña (solo provincias de zona base A/B) -->
+    <section class="step" data-step="montana" hidden>
+      <h3>¿Tu municipio está en zona de montaña o interior alto?</h3>
+      <p class="muted small">En tu provincia, el clima depende mucho de la altitud. Los municipios altos tienen inviernos más fríos y reciben más ayuda.</p>
+      <div class="opts">
+        <button type="button" class="opt" data-set="montana" data-value="si"><b>Sí</b><small>Pueblo de montaña / interior alto</small></button>
+        <button type="button" class="opt" data-set="montana" data-value="no"><b>No</b><small>Costa o zona baja</small></button>
+        <button type="button" class="opt" data-set="montana" data-value="nose"><b>No lo sé</b><small>Lo comprobamos nosotros</small></button>
+      </div>
+    </section>
+
+    <!-- STEP: vivienda -->
+    <section class="step" data-step="vivienda" hidden>
+      <h3>¿Qué tipo de vivienda es?</h3>
+      <div class="opts">
+        <button type="button" class="opt" data-set="vivienda" data-value="casa"><b>Casa / chalet</b><small>Vivienda unifamiliar</small></button>
+        <button type="button" class="opt" data-set="vivienda" data-value="piso"><b>Piso</b><small>Con caldera individual</small></button>
+        <button type="button" class="opt" data-set="vivienda" data-value="edificio"><b>Edificio / comunidad</b><small>Calefacción central o comunitaria</small></button>
+      </div>
+    </section>
+
+    <!-- STEP: ultima planta (piso + aislamiento) -->
+    <section class="step" data-step="ultima_planta" hidden>
+      <h3>¿El piso está en la última planta, justo bajo el tejado?</h3>
+      <div class="opts">
+        <button type="button" class="opt" data-set="ultima_planta" data-value="si"><b>Sí</b><small>Hay un desván o cámara encima</small></button>
+        <button type="button" class="opt" data-set="ultima_planta" data-value="no"><b>No</b><small>Hay otras viviendas encima</small></button>
+      </div>
+    </section>
+
+    <!-- STEP: desvan -->
+    <section class="step" data-step="desvan" hidden>
+      <h3>¿Cómo es el espacio bajo el tejado?</h3>
+      <div class="opts">
+        <button type="button" class="opt" data-set="desvan" data-value="no_habitable"><b>Desván no habitable</b><small>Trastero, cámara de aire, buhardilla sin uso</small></button>
+        <button type="button" class="opt" data-set="desvan" data-value="habitable"><b>Es una habitación</b><small>Buhardilla vivida (dormitorio, salón…)</small></button>
+        <button type="button" class="opt" data-set="desvan" data-value="nose"><b>No lo sé</b><small>Lo revisamos en la visita</small></button>
+      </div>
+    </section>
+
+    <!-- STEP: calefaccion -->
+    <section class="step" data-step="calefaccion" hidden>
+      <h3>¿Con qué te calientas hoy?</h3>
+      <div class="opts opts--4">
+        <button type="button" class="opt" data-set="calefaccion" data-value="gas_natural"><b>Gas natural</b></button>
+        <button type="button" class="opt" data-set="calefaccion" data-value="gasoleo"><b>Gasóleo</b></button>
+        <button type="button" class="opt" data-set="calefaccion" data-value="propano"><b>Propano</b></button>
+        <button type="button" class="opt" data-set="calefaccion" data-value="butano"><b>Butano</b></button>
+        <button type="button" class="opt" data-set="calefaccion" data-value="electrica"><b>Electricidad</b><small>Radiadores, acumuladores</small></button>
+        <button type="button" class="opt" data-set="calefaccion" data-value="otra"><b>Otro</b><small>Leña, pellets, ya tengo aerotermia…</small></button>
+      </div>
+    </section>
+
+    <!-- STEP: emisores -->
+    <section class="step" data-step="emisores" hidden>
+      <h3>¿Cómo llega el calor a las habitaciones?</h3>
+      <div class="opts">
+        <button type="button" class="opt" data-set="emisores" data-value="radiadores_agua"><b>Radiadores de agua</b><small>Conectados a la caldera</small></button>
+        <button type="button" class="opt" data-set="emisores" data-value="suelo_radiante"><b>Suelo radiante</b><small>Por agua</small></button>
+        <button type="button" class="opt" data-set="emisores" data-value="otro"><b>Otro</b><small>Aire, estufas, radiadores eléctricos</small></button>
+      </div>
+    </section>
+
+    <!-- STEP: superficie -->
+    <section class="step" data-step="superficie" hidden>
+      <h3>¿Qué superficie tiene la vivienda?</h3>
+      <div class="opts opts--4">
+        <button type="button" class="opt" data-set="superficie" data-value="<80"><b>Menos de 80 m²</b></button>
+        <button type="button" class="opt" data-set="superficie" data-value="80-120"><b>80 – 120 m²</b></button>
+        <button type="button" class="opt" data-set="superficie" data-value="120-200"><b>120 – 200 m²</b></button>
+        <button type="button" class="opt" data-set="superficie" data-value=">200"><b>Más de 200 m²</b></button>
+      </div>
+    </section>
+
+    <!-- STEP: bono social -->
+    <section class="step" data-step="bono_social" hidden>
+      <h3>¿Tienes el bono social eléctrico o térmico?</h3>
+      <p class="muted small">Los hogares vulnerables reciben un 50 % más de CAE (×1,5). No es obligatorio para acogerse.</p>
+      <div class="opts">
+        <button type="button" class="opt" data-set="bono_social" data-value="si"><b>Sí</b></button>
+        <button type="button" class="opt" data-set="bono_social" data-value="no"><b>No</b></button>
+      </div>
+    </section>
+
+    <!-- STEP: resultado + contacto -->
+    <section class="step" data-step="contacto" hidden>
+      <div class="results"></div>
+      <div class="contact-box">
+        <h3 class="contact-title">Recibe tu estudio gratuito</h3>
+        <p class="muted small contact-sub">Un asesor te llama para confirmar la elegibilidad con tu certificado energético (incluido, sin coste para ti).</p>
+        <label class="field"><span>Nombre</span><input name="nombre" autocomplete="name" required maxlength="80" /></label>
+        <p class="err" data-err="nombre" hidden>Indica tu nombre.</p>
+        <label class="field"><span>Teléfono</span><input name="telefono" type="tel" inputmode="tel" autocomplete="tel" placeholder="600 000 000" required /></label>
+        <p class="err" data-err="telefono" hidden>Introduce un teléfono español válido (9 cifras).</p>
+        <label class="field"><span>Código postal de la vivienda</span><input name="codigo_postal" inputmode="numeric" autocomplete="postal-code" maxlength="5" placeholder="28001" required /></label>
+        <p class="err" data-err="codigo_postal" hidden>Introduce un código postal válido (5 cifras).</p>
+        <label class="consent">
+          <input type="checkbox" name="consentimiento" value="si" required />
+          <span>He leído y acepto la <a href="/politica-de-privacidad/" target="_blank">política de privacidad</a> y consiento que Aislia me contacte por teléfono o WhatsApp para estudiar mi solicitud.</span>
+        </label>
+        <p class="err" data-err="consentimiento" hidden>Debes aceptar la política de privacidad para continuar.</p>
+        <button type="submit" class="btn btn--accent btn--block">Quiero mi estudio gratuito</button>
+        <p class="legal-mini">Responsable: Aislia. Finalidad: gestionar tu solicitud y contactarte. Legitimación: tu consentimiento. Puedes ejercer tus derechos de acceso, rectificación, supresión y demás según la <a href="/politica-de-privacidad/">política de privacidad</a>. Estimación orientativa, no vinculante.</p>
+      </div>
+    </section>
+
+    <section class="step" data-step="ok" hidden>
+      <div class="done">
+        <div class="done-icon">✓</div>
+        <h3>¡Solicitud recibida!</h3>
+        <p>Gracias. Un asesor de Aislia te llamará en las próximas 24–48 h laborables para revisar tu caso. Ten a mano, si lo tienes, tu certificado energético o una factura de calefacción.</p>
+      </div>
+    </section>
+
+    <p class="send-error err" hidden>No hemos podido enviar tu solicitud. Comprueba tu conexión e inténtalo de nuevo.</p>
+  </form>
+
+</div>
+
+<script type="application/json" id="sim-data" set:html={JSON.stringify(provData)} />
+
+<script>
+  type P = { s: string; n: string; i: string; z: string; ins: string; hp: string };
+  const root = document.getElementById('simulador') as HTMLElement;
+  const form = root.querySelector('form') as HTMLFormElement;
+  const provs: P[] = JSON.parse((document.getElementById('sim-data') as HTMLElement).textContent || '[]');
+  const state: Record<string, string> = {};
+  const history: string[] = [];
+  const bar = root.querySelector('.sim-bar') as HTMLElement;
+  const label = root.querySelector('.sim-step-label') as HTMLElement;
+  const back = root.querySelector('.back') as HTMLButtonElement;
+  const select = root.querySelector('#sim-prov') as HTMLSelectElement;
+
+  const prov = () => provs.find((p) => p.s === state.provincia);
+  const wants = (x: string) => state.producto === x || state.producto === 'ambos';
+  const lowZone = () => { const p = prov(); return !!p && ['α', 'A', 'B'].includes(p.z); };
+
+  // Ordered list of steps depending on answers
+  function flow(): string[] {
+    const f = ['producto', 'provincia'];
+    if (lowZone() || prov()?.ins === 'verificar') f.push('montana');
+    f.push('vivienda');
+    if (wants('aislamiento')) {
+      if (state.vivienda === 'piso') f.push('ultima_planta');
+      if (!(state.vivienda === 'piso' && state.ultima_planta === 'no')) f.push('desvan');
+    }
+    if (wants('aerotermia')) f.push('calefaccion', 'emisores', 'superficie', 'bono_social');
+    f.push('contacto');
+    return f;
+  }
+
+  function show(step: string) {
+    root.querySelectorAll<HTMLElement>('.step').forEach((s) => (s.hidden = s.dataset.step !== step));
+    const f = flow();
+    const idx = Math.max(0, f.indexOf(step));
+    const pct = step === 'ok' ? 100 : Math.round(((idx + 1) / f.length) * 100);
+    bar.style.width = pct + '%';
+    label.textContent = step === 'ok' ? '' : step === 'contacto' ? 'Resultado' : `Paso ${idx + 1}`;
+    back.hidden = history.length === 0 || step === 'ok';
+    if (step === 'contacto') renderResults();
+    const sec = root.querySelector<HTMLElement>(`.step[data-step="${step}"]`);
+    if (sec && history.length) {
+      const top = root.getBoundingClientRect().top;
+      if (top < 0 || top > window.innerHeight * 0.6) root.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      (sec.querySelector('h3') as HTMLElement | null)?.setAttribute('tabindex', '-1');
+      (sec.querySelector('h3') as HTMLElement | null)?.focus({ preventScroll: true });
+    }
+  }
+
+  function current(): string {
+    const s = root.querySelector<HTMLElement>('.step:not([hidden])');
+    return s?.dataset.step || 'producto';
+  }
+
+  function next() {
+    const cur = current();
+    const f = flow();
+    let i = f.indexOf(cur) + 1;
+    while (i < f.length && f[i] !== 'contacto' && state[f[i]] && preset.has(f[i])) i++;
+    history.push(cur);
+    show(f[i]);
+  }
+
+  root.addEventListener('click', (e) => {
+    const t = (e.target as HTMLElement).closest<HTMLElement>('[data-set]');
+    if (t) {
+      const k = t.dataset.set!, v = t.dataset.value!;
+      state[k] = v;
+      t.parentElement?.querySelectorAll('.opt').forEach((o) => o.classList.toggle('is-on', o === t));
+      next();
+      return;
+    }
+    if ((e.target as HTMLElement).closest('[data-next]')) {
+      if (current() === 'provincia') {
+        if (!select.value) { showErr('provincia', true); return; }
+        showErr('provincia', false);
+        state.provincia = select.value;
+      }
+      next();
+    }
+  });
+
+  back.addEventListener('click', () => {
+    const prev = history.pop();
+    if (prev) show(prev);
+  });
+
+  function showErr(k: string, on: boolean) {
+    const el = root.querySelector<HTMLElement>(`[data-err="${k}"]`);
+    if (el) el.hidden = !on;
+  }
+
+  // ───── Eligibility logic ─────
+  type R = { tone: 'ok' | 'mid' | 'no'; title: string; text: string; code: string };
+
+  function evalInsulation(): R {
+    const p = prov()!;
+    if (state.vivienda === 'piso' && state.ultima_planta === 'no')
+      return { tone: 'no', code: 'no_ultima_planta', title: 'Aislamiento de desván: no aplicable', text: 'Solo se aísla el espacio bajo el tejado. Si hay viviendas encima de la tuya, la ayuda corresponde a la comunidad: podemos estudiarlo con tu administrador.' };
+    if (state.desvan === 'habitable')
+      return { tone: 'no', code: 'habitable', title: 'Aislamiento de desván: no aplicable', text: 'La ficha RES022 solo cubre espacios bajo cubierta no habitables. Una buhardilla vivida requiere otra solución que podemos valorar.' };
+    if (p.ins === 'no')
+      return { tone: 'no', code: 'zona_no', title: 'Aislamiento de desván: no elegible', text: `El clima de ${p.n} (zona ${p.z}) no permite acogerse a la ficha RES022.` };
+    if ((p.ins === 'altitud' || p.ins === 'verificar') && state.montana === 'no')
+      return { tone: 'no', code: 'zona_baja', title: 'Aislamiento de desván: probablemente no', text: `En ${p.n}, solo los municipios en altitud (zona C, D o E) son elegibles. Si tienes dudas, lo comprobamos con tu certificado energético.` };
+    if (p.ins === 'altitud' || p.ins === 'verificar')
+      return { tone: 'mid', code: 'a_confirmar_altitud', title: 'Aislamiento de desván: posible', text: `En ${p.n} depende de la altitud de tu municipio. Lo confirmamos con el certificado energético, que está incluido.` };
+    if (state.desvan === 'nose')
+      return { tone: 'mid', code: 'a_confirmar_desvan', title: 'Aislamiento de desván: muy probable', text: `${p.n} está en zona climática ${p.z}: el clima es elegible. Solo falta confirmar en la visita que el desván no es habitable.` };
+    return { tone: 'ok', code: 'elegible', title: '¡Aislamiento de desván desde 1 €!', text: `Tu vivienda en ${p.n} (zona ${p.z}) cumple los requisitos principales. Sin condiciones de ingresos ni de superficie mínima.` };
+  }
+
+  const MULT: Record<string, [number, string]> = { casa: [2, 'vivienda unifamiliar'], piso: [2.5, 'piso con caldera individual'], edificio: [3, 'edificio con calefacción central'] };
+
+  function evalHeatPump(): R {
+    const p = prov()!;
+    if (['electrica', 'otra'].includes(state.calefaccion))
+      return { tone: 'no', code: 'no_combustion', title: 'Aerotermia: no elegible al bonus', text: 'La ayuda está pensada para sustituir una caldera de gas, gasóleo, propano o butano. Con tu sistema actual no se puede acoger.' };
+    if (state.emisores === 'otro')
+      return { tone: 'no', code: 'no_hidraulico', title: 'Aerotermia: sin bonus', text: 'El multiplicador CAE solo aplica a la aerotermia por agua (radiadores o suelo radiante). Podemos estudiar otras opciones.' };
+    const [m, mLabel] = MULT[state.vivienda] || MULT.casa;
+    const bono = state.bono_social === 'si';
+    const multTxt = `Tu bonificación CAE: ×${String(m).replace('.', ',')} (${mLabel})${bono ? ' + ×1,5 por bono social' : ''}.`;
+    const big = state.superficie === '120-200' || state.superficie === '>200';
+    const high = p.hp === 'prioritaria' || (p.hp !== 'prioritaria' && state.montana === 'si');
+    if (high || (p.hp === 'intermedia' && (big || bono || m >= 2.5)))
+      return { tone: 'ok', code: 'muy_favorable', title: '¡Aerotermia desde 1 € posible!', text: `Perfil muy favorable en ${p.n}. ${multTxt}` };
+    if (p.hp === 'intermedia')
+      return { tone: 'mid', code: 'favorable', title: 'Aerotermia: ayuda importante', text: `En ${p.n} la ayuda puede cubrir una gran parte de la instalación. ${multTxt}` };
+    return { tone: 'mid', code: 'parcial', title: 'Aerotermia: ayuda parcial', text: `En el clima templado de ${p.n} la ayuda existe pero suele quedar un importe a tu cargo. ${multTxt}` };
+  }
+
+  let rIns: R | null = null, rHp: R | null = null;
+  function renderResults() {
+    rIns = wants('aislamiento') ? evalInsulation() : null;
+    rHp = wants('aerotermia') ? evalHeatPump() : null;
+    const box = root.querySelector('.results') as HTMLElement;
+    const items = [rIns, rHp].filter(Boolean) as R[];
+    box.innerHTML = items.map((r) => `<div class="res res--${r.tone}"><b>${r.title}</b><p>${r.text}</p></div>`).join('') +
+      '<p class="small muted res-note">Estimación orientativa, no vinculante. Sujeto a estudio técnico, certificado energético y presupuesto disponible.</p>';
+    const allNo = items.every((r) => r.tone === 'no');
+    (root.querySelector('.contact-title') as HTMLElement).textContent = allNo ? '¿Quieres que lo revisemos contigo?' : 'Recibe tu estudio gratuito';
+  }
+
+  // ───── Submit ─────
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const fd = new FormData(form);
+    const nombre = String(fd.get('nombre') || '').trim();
+    const tel = String(fd.get('telefono') || '').replace(/[\s.\-()]/g, '').replace(/^(\+34|0034)/, '');
+    const cp = String(fd.get('codigo_postal') || '').trim();
+    const okNombre = nombre.length >= 2;
+    const okTel = /^[6789]\d{8}$/.test(tel);
+    const okCp = /^(0[1-9]|[1-4]\d|5[0-2])\d{3}$/.test(cp);
+    const okCons = !!fd.get('consentimiento');
+    showErr('nombre', !okNombre); showErr('telefono', !okTel); showErr('codigo_postal', !okCp); showErr('consentimiento', !okCons);
+    if (!(okNombre && okTel && okCp && okCons)) return;
+
+    const p = prov();
+    const set = (k: string, v: string) => fd.set(k, v);
+    set('telefono', tel);
+    set('producto', state.producto || ''); set('provincia', p?.n || ''); set('zona_base', p?.z || '');
+    ['montana', 'vivienda', 'ultima_planta', 'desvan', 'calefaccion', 'emisores', 'superficie', 'bono_social'].forEach((k) => set(k, state[k] || ''));
+    set('resultado_aislamiento', rIns?.code || ''); set('resultado_aerotermia', rHp?.code || '');
+    set('pagina', location.pathname);
+    if (p && cp.slice(0, 2) !== p.i) set('provincia', `${p.n} (CP de otra provincia)`);
+
+    const btn = form.querySelector('button[type=submit]') as HTMLButtonElement;
+    btn.disabled = true; btn.textContent = 'Enviando…';
+    try {
+      const body = new URLSearchParams(fd as any).toString();
+      const res = await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body });
+      if (!res.ok) throw new Error(String(res.status));
+      (root.querySelector('.send-error') as HTMLElement).hidden = true;
+      history.length = 0;
+      show('ok');
+      const w = window as any;
+      if (typeof w.gtag === 'function') w.gtag('event', 'generate_lead', { producto: state.producto, provincia: p?.n });
+    } catch {
+      (root.querySelector('.send-error') as HTMLElement).hidden = false;
+      btn.disabled = false; btn.textContent = 'Quiero mi estudio gratuito';
+    }
+  });
+
+  // ───── Presets (product / province pages) ─────
+  const preset = new Set<string>();
+  if (root.dataset.product) { state.producto = root.dataset.product; preset.add('producto'); }
+  if (root.dataset.province) { state.provincia = root.dataset.province; select.value = root.dataset.province; preset.add('provincia'); }
+  const first = flow().find((s) => !preset.has(s)) || 'producto';
+  show(first);
+</script>
+
+<style>
+  .sim { background: #fff; border: 1px solid var(--c-line); border-radius: var(--radius-lg); box-shadow: 0 2px 4px rgba(20,35,31,.05), 0 20px 50px rgba(14,90,76,.14); padding: 26px 22px; position: relative; scroll-margin-top: 90px; }
+  @media (min-width: 600px) { .sim { padding: 32px; } }
+  .sim-head { margin-bottom: 18px; }
+  .sim-progress { height: 6px; background: var(--c-soft); border-radius: 99px; overflow: hidden; }
+  .sim-bar { display: block; height: 100%; width: 8%; background: linear-gradient(90deg, var(--c-primary-2), var(--c-accent)); transition: width .3s ease; border-radius: 99px; }
+  .sim-step-label { margin: 8px 0 0; min-height: 1.2em; }
+  .step h3 { font-size: 1.3rem; outline: none; }
+  .opts { display: grid; gap: 10px; }
+  @media (min-width: 560px) { .opts--4 { grid-template-columns: 1fr 1fr; } }
+  .opt { text-align: left; background: var(--c-bg); border: 2px solid var(--c-line); border-radius: var(--radius); padding: 14px 16px; cursor: pointer; font: inherit; color: var(--c-ink); transition: border-color .12s, background .12s; display: grid; gap: 2px; }
+  .opt:hover { border-color: var(--c-primary-2); background: #fff; }
+  .opt.is-on { border-color: var(--c-primary); background: var(--c-soft); }
+  .opt b { font-size: 1.02rem; }
+  .opt small { color: var(--c-muted); font-size: .86rem; }
+  .field { display: grid; gap: 6px; margin-bottom: 12px; font-weight: 600; font-size: .95rem; }
+  .field input, .field select { font: inherit; font-weight: 400; padding: 13px 14px; border: 2px solid var(--c-line); border-radius: 12px; background: #fff; color: var(--c-ink); width: 100%; }
+  .field input:focus, .field select:focus { border-color: var(--c-primary-2); outline: none; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .nav { margin-top: 14px; display: flex; justify-content: flex-end; }
+  .err { color: var(--c-no); font-size: .88rem; margin: -6px 0 10px; }
+  .consent { display: flex; gap: 10px; align-items: flex-start; font-size: .88rem; margin: 6px 0 14px; color: var(--c-muted); }
+  .consent input { width: 20px; height: 20px; margin-top: 2px; flex-shrink: 0; accent-color: var(--c-primary); }
+  .legal-mini { font-size: .74rem; color: var(--c-muted); margin: 12px 0 0; line-height: 1.5; }
+  .sim-row { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
+  .sim-row .sim-step-label { margin: 0; }
+  .back { background: none; padding: 4px 0; border: 0; color: var(--c-muted); cursor: pointer; font: inherit; font-size: .85rem; }
+  .back:hover { color: var(--c-ink); }
+  .contact-box { border-top: 1px solid var(--c-line); padding-top: 18px; margin-top: 6px; }
+  .contact-box h3 { font-size: 1.15rem; margin-bottom: .2em; }
+  .done { text-align: center; padding: 20px 0; }
+  .done-icon { width: 64px; height: 64px; border-radius: 50%; background: var(--c-ok-bg); color: var(--c-ok); font-size: 2rem; display: grid; place-items: center; margin: 0 auto 14px; font-weight: 800; }
+</style>
+<style is:global>
+  .res { border-radius: var(--radius); padding: 14px 16px; margin-bottom: 10px; border: 1px solid; }
+  .res b { display: block; margin-bottom: 4px; font-size: 1.05rem; }
+  .res p { margin: 0; font-size: .93rem; }
+  .res--ok { background: var(--c-ok-bg); border-color: #b9e0c9; color: #12452c; }
+  .res--mid { background: var(--c-mid-bg); border-color: #f3d3a3; color: #5b3700; }
+  .res--no { background: var(--c-no-bg); border-color: #efc6c6; color: #6b1f1f; }
+  .res-note { margin: 4px 0 14px; }
+</style>

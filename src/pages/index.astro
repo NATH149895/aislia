@@ -1,0 +1,179 @@
+---
+import Base from '../layouts/Base.astro';
+import Simulator from '../components/Simulator.astro';
+import Faq from '../components/Faq.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { PROVINCES } from '../data/provinces';
+import { SITE } from '../data/site';
+
+const faq = [
+  { q: '¿De verdad puedo aislar mi desván o poner aerotermia por 1 €?', a: 'Sí, si tu vivienda cumple las condiciones. Las grandes compañías energéticas están obligadas por ley a financiar ahorro energético a través de los <strong>Certificados de Ahorro Energético (CAE)</strong>. El valor de esos certificados se descuenta de tu factura y, en los casos elegibles, solo pagas 1 €. Te lo confirmamos por escrito antes de empezar.' },
+  { q: '¿Hay requisitos de ingresos?', a: 'No. A diferencia de muchas subvenciones, los CAE no dependen de tus ingresos ni de tu declaración de la renta. Tampoco hay superficie mínima. Lo que cuenta es la vivienda: su zona climática, el tipo de obra y su consumo según el certificado energético.' },
+  { q: '¿Quién paga el certificado energético?', a: 'Nosotros. El certificado de eficiencia energética antes de las obras es obligatorio para tramitar los CAE y está <strong>incluido</strong>: no tiene ningún coste para ti.' },
+  { q: '¿Cuánto tarda todo el proceso?', a: 'Normalmente unas semanas entre la visita técnica y la instalación. El aislamiento de un desván se realiza en una sola jornada; la instalación de aerotermia suele llevar de 2 a 4 días.' },
+  { q: '¿Tengo que adelantar dinero y esperar una subvención?', a: 'No. No es una subvención que tú solicitas y cobras meses después: la ayuda se aplica directamente como descuento en la factura. Nosotros hacemos todo el papeleo.' },
+  { q: '¿En qué zonas de España está disponible?', a: 'El aislamiento de desvanes (ficha RES022) es para viviendas en zona climática C, D o E: casi todo el interior y el norte peninsular, y los municipios de montaña del resto. La aerotermia es válida en toda España, con más ayuda cuanto más frío es el clima. Consulta <a href="/provincias/">tu provincia</a>.' },
+];
+
+const top = ['madrid', 'leon', 'burgos', 'valladolid', 'salamanca', 'barcelona', 'zaragoza', 'navarra', 'asturias', 'alava', 'segovia', 'palencia'];
+const topProvs = top.map((s) => PROVINCES.find((p) => p.slug === s)!);
+
+const service = {
+  '@context': 'https://schema.org', '@type': 'Service',
+  name: 'Aislamiento de desvanes y aerotermia financiados con CAE',
+  provider: { '@type': 'Organization', name: SITE.name, url: SITE.url },
+  areaServed: { '@type': 'Country', name: 'España' },
+  serviceType: ['Aislamiento térmico de desvanes', 'Instalación de aerotermia'],
+  offers: { '@type': 'Offer', price: '1', priceCurrency: 'EUR', description: 'Desde 1 € para viviendas elegibles, sujeto a estudio técnico.' },
+};
+---
+<Base
+  title="Aislamiento y aerotermia desde 1 € con los CAE | Aislia"
+  description={SITE.description}
+  jsonLd={service}
+>
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <span class="eyebrow">Certificados de Ahorro Energético · 2026</span>
+        <h1>Aísla tu casa o cambia tu caldera por aerotermia <span class="hl">desde 1 €</span></h1>
+        <p class="lead">Las compañías energéticas financian tus obras de ahorro a través de los CAE. <strong>Sin requisitos de ingresos, sin superficie mínima</strong> y con el certificado energético incluido.</p>
+        <ul class="check-list">
+          <li>Hasta un 30 % menos en tu factura de calefacción con el aislamiento</li>
+          <li>Ayuda CAE multiplicada hasta ×4 para la aerotermia</li>
+          <li>Instaladores habilitados y todo el papeleo a nuestro cargo</li>
+        </ul>
+      </div>
+      <div class="hero-sim"><Simulator /></div>
+    </div>
+  </section>
+
+  <section class="trust">
+    <div class="wrap trust-grid">
+      <div><b>0 €</b><span>de certificado energético</span></div>
+      <div><b>Sin</b><span>requisitos de ingresos</span></div>
+      <div><b>1 día</b><span>para aislar un desván</span></div>
+      <div><b>100 %</b><span>trámites gestionados</span></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Nuestras soluciones</span>
+        <h2>Dos obras que reducen de verdad tu consumo</h2>
+        <p>Hasta un 30 % del calor de una vivienda se escapa por el tejado, y una caldera de gas o gasóleo consume tres o cuatro veces más energía que una bomba de calor. Atacamos los dos problemas.</p>
+      </div>
+      <div class="grid grid--2">
+        <a href="/aislamiento-desvanes-1-euro/" class="card card--link product">
+          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/><path d="M8 14h8M8 17h8"/></svg></div>
+          <span class="pill pill--ok">Desde 1 €</span>
+          <h3>Aislamiento de desvanes</h3>
+          <p class="muted">Lana mineral soplada o paneles sobre el forjado del desván no habitable. Una jornada de obra, resultados desde el primer invierno.</p>
+          <span class="more">Ver el aislamiento →</span>
+        </a>
+        <a href="/aerotermia-1-euro/" class="card card--link product">
+          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="10" cy="12" r="4"/><path d="M10 8v8M6 12h8M17 9v6"/></svg></div>
+          <span class="pill pill--ok">Desde 1 € · bonus ×2 a ×4</span>
+          <h3>Aerotermia (bomba de calor)</h3>
+          <p class="muted">Sustituimos tu caldera de gas, gasóleo, propano o butano por una bomba de calor aire-agua. Conservas tus radiadores o tu suelo radiante.</p>
+          <span class="more">Ver la aerotermia →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--soft">
+    <div class="wrap two-col">
+      <div>
+        <span class="eyebrow">¿Por qué es casi gratis?</span>
+        <h2>No es una subvención: lo pagan las energéticas</h2>
+        <p>Desde el <strong>Real Decreto 36/2023</strong>, las grandes comercializadoras de gas, electricidad y carburantes (los <em>sujetos obligados</em>) deben demostrar cada año un ahorro de energía. Para cumplir, compran <strong>Certificados de Ahorro Energético</strong>: 1 CAE equivale a 1 kWh ahorrado al año.</p>
+        <p>Cuando aíslas tu desván o cambias tu caldera, generas CAE. Nosotros los tramitamos y su valor se descuenta directamente de tu presupuesto. En las viviendas elegibles, el descuento cubre la obra completa: <strong>tú pagas 1 €</strong>.</p>
+        <a href="/que-son-los-cae/" class="btn btn--ghost">Entender los CAE</a>
+      </div>
+      <div class="flow card">
+        <div class="flow-row"><span class="dot">1</span><div><b>La energética</b><p>tiene la obligación legal de financiar ahorro energético</p></div></div>
+        <div class="flow-row"><span class="dot">2</span><div><b>Tu obra</b><p>genera CAE (kWh ahorrados cada año)</p></div></div>
+        <div class="flow-row"><span class="dot">3</span><div><b>Aislia</b><p>tramita el expediente y cede los CAE</p></div></div>
+        <div class="flow-row"><span class="dot dot--accent">€</span><div><b>Tú</b><p>recibes el descuento directo en tu factura</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Cómo funciona</span>
+        <h2>De la simulación a la obra, sin papeleo para ti</h2>
+      </div>
+      <ol class="steps steps--4">
+        <li><h3>Test de elegibilidad</h3><p>1 minuto en línea para saber si tu vivienda puede acogerse.</p></li>
+        <li><h3>Visita y certificado energético</h3><p>Un técnico visita tu casa y realiza el certificado obligatorio. Incluido.</p></li>
+        <li><h3>Presupuesto con el descuento</h3><p>Precio de la obra menos el valor de los CAE = lo que pagas. Por escrito.</p></li>
+        <li><h3>Instalación y trámites</h3><p>Instalador habilitado, fotos antes/después, expediente CAE: nos ocupamos de todo.</p></li>
+      </ol>
+      <p class="center" style="margin-top:24px"><a href="/como-funciona/">Ver el proceso en detalle →</a></p>
+    </div>
+  </section>
+
+  <section class="section section--warm">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">¿Dónde?</span>
+        <h2>Disponible en toda la España de clima frío y templado</h2>
+        <p>El clima de tu municipio (zona climática C, D o E) determina la ayuda. Cuanto más frío, más CAE. Encuentra tu provincia:</p>
+      </div>
+      <div class="prov-chips">
+        {topProvs.map((p) => <a href={`/provincias/${p.slug}/`} class="chip">{p.name}<span>Zona {p.zone}</span></a>)}
+        <a href="/provincias/" class="chip chip--all">Todas las provincias →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap faq-wrap">
+      <div class="section-head">
+        <span class="eyebrow">Preguntas frecuentes</span>
+        <h2>Lo que todo el mundo nos pregunta</h2>
+        <p><a href="/preguntas-frecuentes/">Ver todas las preguntas</a></p>
+      </div>
+      <Faq items={faq} />
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="wrap"><CtaBand /></div>
+  </section>
+</Base>
+
+<style>
+  .hero { padding: 40px 0 56px; background: radial-gradient(1200px 500px at 85% 0%, #dff0e9 0%, transparent 60%), linear-gradient(180deg, var(--c-soft) 0%, var(--c-bg) 100%); }
+  .hero-grid { display: grid; gap: 32px; align-items: start; }
+  @media (min-width: 980px) { .hero-grid { grid-template-columns: 1.05fr .95fr; gap: 48px; padding-top: 24px; } }
+  .hero-copy .lead { font-size: 1.15rem; color: var(--c-muted); }
+  .hl { color: var(--c-primary-2); background: linear-gradient(transparent 62%, #ffd9b0 62%); padding: 0 4px; white-space: nowrap; }
+  .trust { background: var(--c-primary); color: #fff; }
+  .trust-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; padding-top: 22px; padding-bottom: 22px; }
+  @media (min-width: 820px) { .trust-grid { grid-template-columns: repeat(4, 1fr); } }
+  .trust-grid div { display: grid; }
+  .trust-grid b { font-size: 1.6rem; color: var(--c-accent); }
+  .trust-grid span { font-size: .92rem; color: #cfe6df; }
+  .product .pill { margin-bottom: 8px; }
+  .more { font-weight: 700; color: var(--c-primary-2); }
+  .two-col { display: grid; gap: 32px; align-items: center; }
+  @media (min-width: 900px) { .two-col { grid-template-columns: 1.1fr .9fr; gap: 56px; } }
+  .flow { display: grid; gap: 18px; }
+  .flow-row { display: flex; gap: 14px; align-items: flex-start; }
+  .flow-row p { margin: 0; color: var(--c-muted); font-size: .95rem; }
+  .dot { flex-shrink: 0; width: 38px; height: 38px; border-radius: 12px; background: var(--c-soft); color: var(--c-primary); font-weight: 800; display: grid; place-items: center; }
+  .dot--accent { background: var(--c-accent); color: var(--c-accent-ink); }
+  @media (min-width: 900px) { .steps--4 { grid-template-columns: repeat(2, 1fr); } }
+  .prov-chips { display: flex; flex-wrap: wrap; gap: 10px; }
+  .chip { display: inline-flex; gap: 10px; align-items: center; background: #fff; border: 1px solid var(--c-line); border-radius: 999px; padding: 10px 16px; text-decoration: none; color: var(--c-ink); font-weight: 600; }
+  .chip span { font-size: .78rem; color: var(--c-primary-2); background: var(--c-soft); padding: 2px 8px; border-radius: 99px; }
+  .chip:hover { border-color: var(--c-primary-2); color: var(--c-ink); }
+  .chip--all { background: var(--c-primary); color: #fff; border-color: var(--c-primary); }
+  .chip--all:hover { color: #fff; }
+  .faq-wrap { max-width: 860px; }
+</style>

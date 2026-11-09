@@ -1,0 +1,44 @@
+---
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import Faq from '../components/Faq.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { SITE } from '../data/site';
+const general = [
+  { q: '¿Es realmente 1 €? ¿Dónde está el truco?', a: 'No hay truco: la ley obliga a las grandes compañías energéticas a financiar ahorro energético comprando Certificados de Ahorro Energético (CAE). Cuando tu vivienda cumple las condiciones, el valor de los CAE cubre la obra completa salvo 1 €. Si en tu caso queda un importe a tu cargo, te lo decimos por escrito antes de firmar nada.' },
+  { q: '¿Hay requisitos de ingresos?', a: 'No. Los CAE no dependen de tus ingresos. Tampoco hay superficie mínima.' },
+  { q: '¿Tengo que pagar el certificado energético?', a: 'No, está incluido. Es obligatorio para tramitar los CAE y lo realizamos nosotros.' },
+  { q: '¿Tengo que adelantar dinero?', a: 'No. El valor de los CAE se descuenta directamente de la factura. No esperas ningún reembolso.' },
+  { q: '¿Puedo acumularlo con otras ayudas?', a: 'Depende de la ayuda. Firmarás una declaración responsable sobre las demás ayudas públicas recibidas para la misma obra; nuestro asesor revisa tu caso para evitar incompatibilidades.' },
+  { q: '¿Soy inquilino, puedo pedirlo?', a: 'La obra la debe autorizar el propietario. Si eres inquilino, podemos explicarle el programa a tu casero: a él también le interesa, porque revaloriza su vivienda.' },
+  { q: '¿Quién realiza las obras?', a: 'Empresas instaladoras habilitadas, inscritas en el Registro de Empresas Acreditadas (REA) en el caso del aislamiento, con las que trabajamos de forma habitual.' },
+];
+const ins = [
+  { q: '¿Qué viviendas pueden aislar el desván desde 1 €?', a: 'Viviendas residenciales privadas existentes, en zona climática C, D o E, con un desván o espacio bajo cubierta no habitable.' },
+  { q: '¿Mi buhardilla habitable es elegible?', a: 'No con esta ficha: la RES022 solo cubre espacios no habitables.' },
+  { q: '¿Hay que vaciar el desván?', a: 'Basta con despejar la zona a aislar y el acceso. Te indicamos qué hacer en la visita técnica.' },
+];
+const hp = [
+  { q: '¿Qué calderas se pueden sustituir?', a: 'Calderas de gas natural, gasóleo, propano o butano.' },
+  { q: '¿Necesito radiadores de agua?', a: 'Sí: el bonus solo aplica a bombas de calor que calientan agua (radiadores o suelo radiante). Los conservas.' },
+  { q: '¿Hasta cuándo dura el bonus?', a: `Para obras iniciadas desde el 22/03/2026 y terminadas antes del ${SITE.heatPumpDeadline} (${SITE.heatPumpDeadlineCommunities} para comunidades de propietarios), dentro del presupuesto nacional disponible.` },
+  { q: '¿Mi comunidad de propietarios puede acogerse?', a: 'Sí, y con los multiplicadores más altos: ×3 para edificios con calefacción central y ×4 si se pasa de calderas individuales a una bomba de calor colectiva. Contáctanos para organizar una presentación a la junta.' },
+];
+---
+<Base title="Preguntas frecuentes sobre el aislamiento y la aerotermia desde 1 €" description="Requisitos, plazos, certificado energético, ingresos, comunidades de propietarios… Todas las respuestas sobre el aislamiento de desvanes y la aerotermia financiados por los CAE.">
+  <section class="page-hero">
+    <div class="wrap">
+      <Breadcrumbs items={[{ name: 'Preguntas frecuentes', href: '/preguntas-frecuentes/' }]} />
+      <h1>Preguntas frecuentes</h1>
+      <p class="lead">Todo lo que necesitas saber antes de dar el paso. ¿No encuentras tu respuesta? Haz el test y te llamamos.</p>
+    </div>
+  </section>
+  <section class="section" style="padding-top:24px">
+    <div class="wrap" style="max-width:860px">
+      <h2>General</h2><Faq items={general} />
+      <h2 style="margin-top:40px">Aislamiento de desvanes</h2><Faq items={ins} />
+      <h2 style="margin-top:40px">Aerotermia</h2><Faq items={hp} />
+    </div>
+  </section>
+  <section class="section" style="padding-top:0"><div class="wrap"><CtaBand /></div></section>
+</Base>

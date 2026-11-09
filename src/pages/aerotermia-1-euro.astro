@@ -1,0 +1,109 @@
+---
+import Base from '../layouts/Base.astro';
+import Simulator from '../components/Simulator.astro';
+import Faq from '../components/Faq.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { SITE } from '../data/site';
+
+const faq = [
+  { q: '¿Qué es la aerotermia?', a: 'Es una bomba de calor que capta la energía del aire exterior para calentar el agua de tus radiadores, tu suelo radiante y tu agua caliente sanitaria. Por cada kWh de electricidad que consume, entrega entre 3 y 4 kWh de calor.' },
+  { q: '¿Tengo que cambiar mis radiadores?', a: 'No. La instalación se conecta a tu circuito de agua actual: conservas tus radiadores o tu suelo radiante. Solo sustituimos la caldera.' },
+  { q: '¿Qué pasa con mi caldera antigua?', a: 'Se retira o se inutiliza. Excepción: en zonas muy frías (D1, D2, D3 y E1) puede mantenerse como apoyo si la bomba de calor cubre más del 35 % de las necesidades; en ese caso la ayuda se calcula sobre la parte cubierta por la aerotermia.' },
+  { q: '¿Funciona en una zona muy fría?', a: 'Sí. Las bombas de calor actuales funcionan con temperaturas muy por debajo de 0 °C. Precisamente en zonas frías es donde más energía ahorras y donde la ayuda CAE es mayor.' },
+  { q: '¿Hasta cuándo puedo beneficiarme del bonus?', a: `Las obras deben haber empezado a partir del 22 de marzo de 2026 y terminar antes del ${SITE.heatPumpDeadline} (${SITE.heatPumpDeadlineCommunities} para comunidades de propietarios). El presupuesto nacional es limitado y se asigna por orden de llegada de los expedientes.` },
+  { q: '¿Y si tengo radiadores eléctricos o splits?', a: 'El bonus está reservado a la sustitución de calderas de combustión (gas natural, gasóleo, propano, butano) por aerotermia con emisores de agua. Con calefacción eléctrica no es posible acogerse a esta ayuda.' },
+];
+
+const ld = {
+  '@context': 'https://schema.org', '@type': 'Service',
+  name: 'Aerotermia desde 1 € (ficha CAE RES060 con multiplicador)',
+  serviceType: 'Instalación de bomba de calor aerotérmica',
+  provider: { '@type': 'Organization', name: SITE.name, url: SITE.url },
+  areaServed: { '@type': 'Country', name: 'España' },
+  offers: { '@type': 'Offer', price: '1', priceCurrency: 'EUR', description: 'Desde 1 € según perfil y zona climática, sujeto a estudio técnico y presupuesto disponible.' },
+};
+---
+<Base
+  title="Aerotermia desde 1 €: cambia tu caldera con los CAE (bonus ×2 a ×4)"
+  description="Sustituye tu caldera de gas, gasóleo, propano o butano por aerotermia desde 1 €. Ayuda CAE multiplicada de ×2 a ×4 hasta noviembre de 2027. Conservas tus radiadores. Test gratuito."
+  jsonLd={ld}
+>
+  <section class="page-hero">
+    <div class="wrap hero-grid">
+      <div>
+        <Breadcrumbs items={[{ name: 'Aerotermia', href: '/aerotermia-1-euro/' }]} />
+        <span class="pill pill--ok">Nuevo bonus CAE · BOE 7/11/2026</span>
+        <h1>Cambia tu caldera por aerotermia desde 1 €</h1>
+        <p class="lead">El Gobierno ha multiplicado <strong>de ×2 a ×4</strong> el valor de los CAE para quien sustituya una caldera de gas, gasóleo, propano o butano por una bomba de calor. Conservas tus radiadores y divides tu consumo de calefacción.</p>
+        <ul class="check-list">
+          <li>Hasta 3–4 veces menos energía para el mismo confort</li>
+          <li>Calefacción y agua caliente con un solo equipo</li>
+          <li>Plazo limitado: obras hasta el {SITE.heatPumpDeadline}</li>
+        </ul>
+      </div>
+      <Simulator product="aerotermia" />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap prose">
+      <h2>El plan de impulso de la bomba de calor</h2>
+      <p>Con el <strong>Real Decreto-ley 7/2026</strong> y la <strong>Resolución de 3 de noviembre de 2026</strong> (BOE del 7 de noviembre), el Estado ha creado coeficientes multiplicadores para la ficha CAE RES060, «sustitución de caldera de combustión por una bomba de calor de accionamiento eléctrico». Resultado: la misma obra genera entre 2 y 4 veces más certificados, y por tanto un descuento mucho mayor.</p>
+
+      <h2>¿Cuánto se multiplica tu ayuda?</h2>
+      <div class="table-wrap">
+        <table class="table">
+          <thead><tr><th>Tu situación</th><th>Multiplicador CAE</th></tr></thead>
+          <tbody>
+            <tr><td>Vivienda unifamiliar (casa, chalet)</td><td><strong>×2</strong></td></tr>
+            <tr><td>Piso o edificio con calderas individuales</td><td><strong>×2,5</strong></td></tr>
+            <tr><td>Edificio con calefacción central</td><td><strong>×3</strong></td></tr>
+            <tr><td>Edificio que pasa de calderas individuales a una bomba de calor colectiva</td><td><strong>×4</strong></td></tr>
+            <tr><td>Hogar vulnerable (bono social)</td><td><strong>×1,5 adicional</strong>, acumulable</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Condiciones</h2>
+      <ul class="check-list">
+        <li><strong>Vivienda residencial privada:</strong> casa, piso o edificio de viviendas.</li>
+        <li><strong>Caldera de combustión actual:</strong> gas natural, gasóleo, propano o butano.</li>
+        <li><strong>Calefacción por agua:</strong> radiadores o suelo radiante (bomba de calor aire-agua o geotérmica).</li>
+        <li><strong>Fechas:</strong> obras iniciadas desde el 22/03/2026 y terminadas antes del {SITE.heatPumpDeadline} ({SITE.heatPumpDeadlineCommunities} en comunidades).</li>
+        <li><strong>Certificado energético</strong> antes y después de la obra: incluido.</li>
+      </ul>
+
+      <h2>¿Dónde es más fácil llegar a 1 €?</h2>
+      <p>La ayuda es válida en toda España, pero su importe depende del clima: cuanto más frío, más calefacción necesitas y más CAE generas.</p>
+      <ul>
+        <li><strong>Zonas D y E</strong> (León, Burgos, Valladolid, Salamanca, Soria, Ávila, Segovia, Álava, Gipuzkoa, Cuenca…): el 1 € es realista, sobre todo en casas grandes.</li>
+        <li><strong>Zona C</strong> (Madrid, Barcelona, Zaragoza, Navarra, Asturias, Galicia…): ayuda muy importante; en municipios altos se acerca al 1 €.</li>
+        <li><strong>Zonas A y B</strong> (costa mediterránea, Andalucía, Canarias): ayuda parcial, salvo en municipios de montaña.</li>
+      </ul>
+      <p><a href="/provincias/">Consulta la situación de tu provincia →</a></p>
+
+      <h2>El perfil ideal</h2>
+      <p>Una casa en zona D o E, de más de 120 m², con una caldera de gasóleo o gas y radiadores de agua. Los edificios con calefacción central, o que pasan a una instalación colectiva, tienen un potencial enorme gracias a los multiplicadores ×3 y ×4.</p>
+
+      <blockquote>El presupuesto nacional del plan está limitado (1 287 GWh para 2027) y se asigna por orden de llegada. Cuanto antes se tramite tu expediente, mejor.</blockquote>
+    </div>
+  </section>
+
+  <section class="section section--soft">
+    <div class="wrap" style="max-width:860px">
+      <h2>Preguntas sobre la aerotermia</h2>
+      <Faq items={faq} />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap"><CtaBand title="¿Cuánto cubriría la ayuda en tu caso?" text="Responde 6 preguntas y te decimos si puedes acceder a la aerotermia desde 1 €." /></div>
+  </section>
+</Base>
+
+<style>
+  .hero-grid { display: grid; gap: 32px; align-items: start; }
+  @media (min-width: 980px) { .hero-grid { grid-template-columns: 1.05fr .95fr; gap: 48px; } }
+  .pill { margin-bottom: 14px; white-space: normal; }
+</style>

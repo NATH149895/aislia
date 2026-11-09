@@ -1,0 +1,7 @@
+---
+const { title = '¿Tu vivienda es elegible?', text = 'Responde unas preguntas y te decimos en 1 minuto si puedes acogerte. Gratis y sin compromiso.' } = Astro.props;
+---
+<div class="cta-band">
+  <div><h2>{title}</h2><p>{text}</p></div>
+  <a href="/simulador/" class="btn btn--accent">Hacer el test gratuito →</a>
+</div>

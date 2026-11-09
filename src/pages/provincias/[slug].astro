@@ -1,0 +1,122 @@
+---
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Simulator from '../../components/Simulator.astro';
+import Faq from '../../components/Faq.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { PROVINCES, INSULATION_TEXT, HEATPUMP_TEXT, type Province } from '../../data/provinces';
+import { SITE } from '../../data/site';
+
+export function getStaticPaths() {
+  return PROVINCES.map((p) => ({ params: { slug: p.slug }, props: { p } }));
+}
+const { p } = Astro.props as { p: Province };
+const ins = INSULATION_TEXT[p.insulation];
+const hp = HEATPUMP_TEXT[p.heatPump];
+const same = PROVINCES.filter((x) => x.community === p.community && x.slug !== p.slug);
+const sameZone = PROVINCES.filter((x) => x.zone === p.zone && x.slug !== p.slug && x.community !== p.community).slice(0, 6);
+const insOk = p.insulation === 'toda';
+const capitalTxt = p.capital === p.name ? `la ciudad de ${p.capital}` : `${p.capital}`;
+
+const NOTES: Record<string, string> = {
+  madrid: 'Ojo: aunque la zona base de la provincia es C, Madrid capital (unos 650 m de altitud) está en zona D3, igual que buena parte de la sierra y del norte de la comunidad. Muchos hogares madrileños tienen así un perfil muy favorable para la aerotermia.',
+  granada: 'Gran parte de la provincia es de interior y en altitud: la capital y la vega, el Altiplano o las Alpujarras altas tienen inviernos fríos y pueden estar en zona C o D.',
+  jaen: 'Los municipios de las sierras de Cazorla, Segura o Sierra Mágina, y buena parte del interior, superan la altitud de la zona base y pueden estar en zona C o D.',
+  teruel: 'Teruel tiene muchos municipios a más de 900 m: aunque la zona base es C, gran parte de la provincia está en zona D o E, con un potencial de ayuda muy alto.',
+  huesca: 'Los valles pirenaicos y el prepirineo están en zonas D y E: son de las zonas con más ayuda de España.',
+  navarra: 'Pamplona y el norte de Navarra tienen inviernos fríos: muchos municipios están en zona D.',
+  'la-rioja': 'Logroño está en zona C, pero la sierra riojana sube rápidamente a zona D y E.',
+  albacete: 'Gran parte de la provincia supera los 600–700 m: muchos municipios, incluida la capital, tienen inviernos de zona D.',
+  ourense: 'El interior montañoso de Ourense alcanza zonas D y E: la aerotermia puede llegar a 1 € en muchas casas.',
+  asturias: 'La costa está en zona C, pero los concejos de montaña del interior pasan a zona D y E.',
+  cantabria: 'La costa está en zona C; Campoo, Liébana y los valles altos pasan a zona D y E.',
+  valencia: 'Aunque la costa es de zona B, comarcas interiores como Los Serranos, el Rincón de Ademuz o la Plana de Utiel-Requena tienen inviernos mucho más fríos.',
+  alicante: 'Los municipios de interior y montaña (Alcoy, Villena…) pueden superar la zona base y acceder al aislamiento de desvanes.',
+  murcia: 'El Noroeste murciano (Caravaca, Moratalla…) es mucho más frío que la costa y puede estar en zona C.',
+  malaga: 'La Serranía de Ronda y la comarca de Antequera tienen inviernos más fríos que la Costa del Sol.',
+  'santa-cruz-de-tenerife': 'Solo algunas localidades de cumbre alcanzan la zona C en Tenerife y La Palma.',
+  'las-palmas': 'Solo algunas localidades de cumbre de Gran Canaria alcanzan la zona C.',
+};
+const note = NOTES[p.slug];
+
+const climate =
+  p.zone === 'E' ? `Con una zona base E, la más fría de la clasificación, ${p.name} es la provincia peninsular con mayor demanda de calefacción. Aquí cada kWh ahorrado cuenta, y los CAE generados por una obra son los más altos de España.`
+  : p.zone === 'D' ? `Con una zona base D, ${p.name} tiene inviernos largos y fríos. Las calefacciones funcionan muchos meses al año, por eso el aislamiento y la aerotermia generan muchos CAE: es uno de los mejores territorios para conseguir la obra desde 1 €.`
+  : p.zone === 'C' ? `La zona base de ${p.name} es C: inviernos moderados en las zonas bajas, pero bastante más fríos en los municipios de interior y altitud, que pueden pasar a zona D. El aislamiento de desvanes es elegible en toda la provincia.`
+  : `El clima de las zonas bajas de ${p.name} es templado (zona ${p.zone}). Los municipios de interior y montaña, en cambio, pueden alcanzar la zona C o D y acceder a las mismas ayudas que el norte peninsular.`;
+
+const faq = [
+  { q: `¿Puedo aislar mi desván por 1 € en ${p.name}?`, a: insOk ? `Sí. Toda la provincia de ${p.name} está en zona climática ${p.zone} o más fría, así que cualquier vivienda con un desván no habitable puede acogerse a la ficha RES022, sin condición de ingresos ni superficie mínima.` : `${ins.long} El certificado energético, que realizamos gratis, indica la zona exacta de tu vivienda.` },
+  { q: `¿Cuánta ayuda hay para la aerotermia en ${p.name}?`, a: `${hp.long} A eso se suma el multiplicador según tu vivienda: ×2 para una casa, ×2,5 para un piso con caldera individual, ×3 o ×4 para edificios, y ×1,5 adicional con bono social.` },
+  { q: `¿Trabajáis en toda la provincia de ${p.name}?`, a: `Sí, intervenimos en ${capitalTxt} y en el resto de municipios de la provincia con instaladores habilitados. Indica tu código postal en el test y te confirmamos la disponibilidad.` },
+];
+
+const ld = {
+  '@context': 'https://schema.org', '@type': 'Service',
+  name: `Aislamiento de desvanes y aerotermia desde 1 € en ${p.name}`,
+  provider: { '@type': 'Organization', name: SITE.name, url: SITE.url },
+  areaServed: { '@type': 'AdministrativeArea', name: `Provincia de ${p.name}`, containedInPlace: { '@type': 'AdministrativeArea', name: p.community } },
+};
+const title = insOk ? `Aislamiento y aerotermia por 1 € en ${p.name}` : `Aerotermia y aislamiento con ayudas CAE en ${p.name}`;
+const desc = insOk
+  ? `Aísla tu desván o cambia tu caldera por aerotermia desde 1 € en ${p.name} (zona ${p.zone}). Ayudas CAE sin requisitos de ingresos, certificado energético incluido. Test gratuito.`
+  : `Ayudas CAE en ${p.name}: aerotermia con bonus de ×2 a ×4 y aislamiento de desvanes en municipios de altitud. Comprueba gratis si tu vivienda es elegible.`;
+---
+<Base title={title} description={desc} jsonLd={ld}>
+  <section class="page-hero">
+    <div class="wrap hero-grid">
+      <div>
+        <Breadcrumbs items={[{ name: 'Provincias', href: '/provincias/' }, { name: p.name, href: `/provincias/${p.slug}/` }]} />
+        <h1>{insOk ? <>Aislamiento y aerotermia <span class="nowrap">desde 1 €</span> en {p.name}</> : <>Ayudas CAE para tu vivienda en {p.name}</>}</h1>
+        <p class="lead">{p.community} · zona climática base <strong>{p.zone}</strong>. Comprueba en 1 minuto si tu vivienda puede acogerse, sin requisitos de ingresos y con el certificado energético incluido.</p>
+        <div class="status">
+          <div class="card"><span class="small muted">Aislamiento de desván (RES022)</span><span class={`pill pill--${ins.tone}`}>{ins.short}</span></div>
+          <div class="card"><span class="small muted">Aerotermia (RES060 + bonus)</span><span class={`pill pill--${hp.tone}`}>{hp.short}</span></div>
+        </div>
+      </div>
+      <Simulator province={p.slug} />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap prose">
+      <h2>El clima de {p.name} y las ayudas CAE</h2>
+      <p>{climate}</p>
+      {note && <blockquote>{note}</blockquote>}
+
+      <h2>Aislamiento de desvanes en {p.name}</h2>
+      <p>{ins.long}</p>
+      {p.insulation !== 'no' && <p>Aislamos el suelo de tu desván no habitable con lana mineral soplada o paneles, en una sola jornada. La resistencia térmica mínima exigida va de 3,8 m²K/W (zona C) a 4,7 m²K/W (zona E). <a href="/aislamiento-desvanes-1-euro/">Todo sobre el aislamiento de desvanes →</a></p>}
+
+      <h2>Aerotermia en {p.name}</h2>
+      <p>{hp.long}</p>
+      <p>Sustituimos tu caldera de gas natural, gasóleo, propano o butano por una bomba de calor aire-agua conectada a tus radiadores o a tu suelo radiante. Obras hasta el {SITE.heatPumpDeadline}. <a href="/aerotermia-1-euro/">Todo sobre la aerotermia desde 1 € →</a></p>
+
+      <h2>Preguntas frecuentes en {p.name}</h2>
+      <Faq items={faq} />
+
+      {same.length > 0 && (
+        <>
+          <h2>Otras provincias de {p.community}</h2>
+          <p>{same.map((x, i) => <>{i > 0 && ' · '}<a href={`/provincias/${x.slug}/`}>{x.name}</a></>)}</p>
+        </>
+      )}
+      {sameZone.length > 0 && (
+        <>
+          <h3>Provincias con la misma zona climática ({p.zone})</h3>
+          <p>{sameZone.map((x, i) => <>{i > 0 && ' · '}<a href={`/provincias/${x.slug}/`}>{x.name}</a></>)}</p>
+        </>
+      )}
+    </div>
+  </section>
+  <section class="section" style="padding-top:0"><div class="wrap"><CtaBand title={`¿Vives en ${p.name}?`} text="Haz el test gratuito: resultado inmediato y llamada de un asesor para confirmarlo." /></div></section>
+</Base>
+<style>
+  .hero-grid { display: grid; gap: 32px; align-items: start; }
+  @media (min-width: 980px) { .hero-grid { grid-template-columns: 1.05fr .95fr; gap: 48px; } }
+  .status { display: grid; gap: 12px; margin-top: 8px; }
+  @media (min-width: 560px) { .status { grid-template-columns: 1fr 1fr; } }
+  .status .card { padding: 16px 18px; display: grid; gap: 8px; justify-items: start; }
+  .status .pill { white-space: normal; }
+  .nowrap { white-space: nowrap; }
+</style>

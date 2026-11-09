@@ -1,0 +1,36 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CtaBand from '../../components/CtaBand.astro';
+const posts = (await getCollection('blog', (p) => !p.data.draft)).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const CAT: Record<string, string> = { aislamiento: 'Aislamiento', aerotermia: 'Aerotermia', cae: 'CAE', ahorro: 'Ahorro', guias: 'Guías' };
+const fmt = (d: Date) => d.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+<Base title="Guías sobre aislamiento, aerotermia y ayudas CAE" description="Guías prácticas y novedades sobre el aislamiento de desvanes, la aerotermia y los Certificados de Ahorro Energético (CAE) en España.">
+  <section class="page-hero">
+    <div class="wrap">
+      <Breadcrumbs items={[{ name: 'Guías', href: '/blog/' }]} />
+      <h1>Guías y novedades</h1>
+      <p class="lead">Todo lo que necesitas saber para ahorrar energía en casa y aprovechar las ayudas CAE.</p>
+    </div>
+  </section>
+  <section class="section" style="padding-top:24px">
+    <div class="wrap grid grid--3">
+      {posts.map((p) => (
+        <a href={`/blog/${p.id}/`} class="card card--link post">
+          <span class="pill pill--ok">{CAT[p.data.category]}</span>
+          <h2 class="h3">{p.data.title}</h2>
+          <p class="muted small">{p.data.description}</p>
+          <time class="small muted" datetime={p.data.pubDate.toISOString()}>{fmt(p.data.pubDate)}</time>
+        </a>
+      ))}
+    </div>
+  </section>
+  <section class="section" style="padding-top:0"><div class="wrap"><CtaBand /></div></section>
+</Base>
+<style>
+  .post { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
+  .h3 { font-size: 1.2rem; margin: 8px 0 4px; }
+  .post time { margin-top: auto; }
+</style>

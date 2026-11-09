@@ -1,0 +1,55 @@
+---
+import Logo from './Logo.astro';
+import { SITE } from '../data/site';
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <Logo light />
+        <p class="about">Te ayudamos a aislar tu vivienda y a cambiar tu caldera por aerotermia financiándolo con los Certificados de Ahorro Energético (CAE). Instaladores habilitados en toda España.</p>
+        <a href="/simulador/" class="btn btn--accent">Comprobar elegibilidad</a>
+      </div>
+      <div>
+        <p class="h">Soluciones</p>
+        <a href="/aislamiento-desvanes-1-euro/">Aislamiento de desvanes desde 1 €</a>
+        <a href="/aerotermia-1-euro/">Aerotermia desde 1 €</a>
+        <a href="/simulador/">Simulador de elegibilidad</a>
+      </div>
+      <div>
+        <p class="h">Información</p>
+        <a href="/como-funciona/">Cómo funciona</a>
+        <a href="/que-son-los-cae/">Qué son los CAE</a>
+        <a href="/zonas-climaticas/">Zonas climáticas</a>
+        <a href="/provincias/">Provincias</a>
+        <a href="/preguntas-frecuentes/">Preguntas frecuentes</a>
+        <a href="/blog/">Guías y noticias</a>
+      </div>
+      <div>
+        <p class="h">Legal</p>
+        <a href="/aviso-legal/">Aviso legal</a>
+        <a href="/politica-de-privacidad/">Política de privacidad</a>
+        <a href="/politica-de-cookies/">Política de cookies</a>
+      </div>
+    </div>
+    <p class="disclaimer">
+      «Desde 1 €»: importe a cargo del cliente para viviendas que cumplen las condiciones de elegibilidad, sujeto a estudio técnico y a la valoración de los CAE.
+      Aerotermia: obras iniciadas desde el 22/03/2026 y finalizadas antes del {SITE.heatPumpDeadline} ({SITE.heatPumpDeadlineCommunities} para comunidades de propietarios), dentro del límite del presupuesto disponible.
+      Marco normativo: Real Decreto 36/2023, Orden TED/845/2023 (fichas RES022 y RES060), Real Decreto-ley 7/2026 y Resolución de 3 de noviembre de 2026 (BOE de 7/11/2026).
+      Las estimaciones del simulador son orientativas y no vinculantes.
+    </p>
+    <p class="copy">© {year} {SITE.name} · {SITE.domain}</p>
+  </div>
+</footer>
+<style>
+  .site-footer { background: #0b2a24; color: #b9cfc8; padding: 56px 0 28px; margin-top: 0; font-size: .95rem; }
+  .cols { display: grid; gap: 32px; }
+  @media (min-width: 820px) { .cols { grid-template-columns: 1.6fr 1fr 1fr 1fr; } }
+  .about { margin: 16px 0 20px; max-width: 360px; }
+  .h { color: #fff; font-weight: 700; margin-bottom: 12px; }
+  .cols a:not(.btn) { display: block; color: #b9cfc8; text-decoration: none; padding: 4px 0; }
+  .cols a:not(.btn):hover { color: #fff; }
+  .disclaimer { margin-top: 40px; padding-top: 24px; border-top: 1px solid #1d4a40; font-size: .8rem; line-height: 1.6; color: #8fa9a1; }
+  .copy { font-size: .85rem; color: #8fa9a1; margin: 0; }
+</style>
